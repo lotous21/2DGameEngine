@@ -72,11 +72,13 @@ namespace BoBo2D
         public void AddComponenet(Componenet componenet)
         {
             Components.Add(componenet);
+            componenet.Enable();
         }
 
         public void RemoveComponenet(Componenet componenet)
         {
             Components.Remove(componenet);
+            componenet.Disable();
         }
 
         public Componenet GetComponenet(int index)
@@ -102,14 +104,6 @@ namespace BoBo2D
                 }
             }
             return false;
-        }
-
-        public void Draw(SpriteBatch sb)
-        {
-            if (this.isEnabled)
-            {
-                sb.Draw(this.Image, this.Position, ImageColor);
-            }
         }
     }
 }

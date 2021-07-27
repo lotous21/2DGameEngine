@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BoBo2D
 {
-    class Enemy : GameObjects
+    class Enemy : Componenet
     {
         public Vector2 Location;
         public Vector2 Velocity;
@@ -16,7 +16,7 @@ namespace BoBo2D
 
         public Enemy(Vector2 location, Texture2D image, int velocity)
         {
-            this.Location = location;
+            this.Transform.Position = location;
             this.image = image;
             this.IsVisible = true;
             this.Velocity = new Vector2(-velocity, 0);
@@ -26,21 +26,13 @@ namespace BoBo2D
 
         public void Update(float elapsed)
         {
-            this.Location += this.Velocity * elapsed;
+            this.Transform.Position += this.Velocity * elapsed;
             this.Bounds.X = (int)Location.X;
             this.Bounds.Y = (int)Location.Y;
 
             if (this.Location.X < -20)
             {
                 this.IsVisible = false;
-            }
-        }
-
-        public void Draw(SpriteBatch sb)
-        {
-            if (this.IsVisible)
-            {
-                sb.Draw(this.image, this.Location, Color.White);
             }
         }
     }

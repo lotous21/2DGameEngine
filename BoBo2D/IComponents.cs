@@ -8,6 +8,8 @@ namespace BoBo2D
 {
     interface IComponents
     {
-                    
+        public bool IsEnable();
+        public void Enable();
+        public void Disable();
     }
 }

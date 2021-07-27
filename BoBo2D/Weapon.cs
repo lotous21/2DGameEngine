@@ -8,7 +8,7 @@ using System.Text;
 
 namespace BoBo2D
 {
-    class Weapon : GameObjects
+    class Weapon : Componenet
     {
         public string WeaponName;
         public Projectile Bullet;

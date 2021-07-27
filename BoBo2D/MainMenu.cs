@@ -9,27 +9,26 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BoBo2D
 {
-    class MainMenu : GameObjects
+    class MainMenu : Componenet
     {
-        Button PlayButton;
-
-        public MainMenu(Vector2 location, Rectangle bounds, Texture2D image, Color color, Button button)
+        public MainMenu(Vector2 location, Rectangle bounds, Texture2D image, Color color)
         {
-            this.Position = location;
+            this.Transform.Position = location;
             this.Bounds = bounds;
             this.Image = image;
             this.ImageColor = color;
-            this.PlayButton = button;
+            //this.PlayButton = button;
+            //this.PlayButton.Transform.Position = new Vector2(430, 250);
         }
 
-        public void PrintMenu (SpriteBatch sb)
-        {
-            if (IsEnable())
-            {
-                sb.Draw(this.Image, this.Position, this.ImageColor);
-                sb.Draw(PlayButton.Image, PlayButton.Position, PlayButton.ImageColor);
-                sb.DrawString(PlayButton.ButtonLabel, "Play", new Vector2(600, 320), Color.OrangeRed);
-            }
-        }
+        //public void PrintMenu (SpriteBatch sb)
+        //{
+        //    if (IsEnable())
+        //    {
+        //        sb.Draw(this.Image, this.Position, this.ImageColor);
+        //        sb.Draw(PlayButton.Image, PlayButton.Position, PlayButton.ImageColor);
+        //        sb.DrawString(PlayButton.ButtonLabel, "Play", new Vector2(600, 320), Color.OrangeRed);
+        //    }
+        //}
     }
 }
