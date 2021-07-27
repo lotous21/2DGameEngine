@@ -1,0 +1,18 @@
+Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Button.png","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/Button.xnb","TextureProcessor","Texture2DContent",2904,28885,0.1081161
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Button2.png","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/Button2.xnb","TextureProcessor","Texture2DContent",17641,243285,0.0059285
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/City2d.jpg","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/City2d.xnb","TextureProcessor","Texture2DContent",600213,3686485,0.071649
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/City2dRef.jpg","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/City2dRef.xnb","TextureProcessor","Texture2DContent",611472,3686485,0.0752998
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/explosion.wav","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/explosion.xnb","SoundEffectProcessor","SoundEffectContent",159298,158717,0.532185
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Font.spritefont","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/Font.xnb","FontDescriptionProcessor","SpriteFontContent",2008,21538,0.0751684
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/hit.wav","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/hit.xnb","SoundEffectProcessor","SoundEffectContent",230056,229425,0.4635268
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Meteor.png","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/Meteor.xnb","TextureProcessor","Texture2DContent",2066,3221,0.0011097
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Missile.png","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/Missile.xnb","TextureProcessor","Texture2DContent",610,1885,0.0008545
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/OpeningSound.mp3","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/OpeningSound.xnb","SongProcessor","SongContent",47329,130,0.4905093
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Plane.png","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/Plane.xnb","TextureProcessor","Texture2DContent",23296,16469,0.0014857
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Plane2.png","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/Plane2.xnb","TextureProcessor","Texture2DContent",10066,30805,0.0015781
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Poweup.png","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/Poweup.xnb","TextureProcessor","Texture2DContent",1325,7141,0.0009552
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/reload.wav","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/reload.xnb","SoundEffectProcessor","SoundEffectContent",83160,83221,0.4796636
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/ShotSound.wav","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/ShotSound.xnb","SoundEffectProcessor","SoundEffectContent",237684,237673,0.4595214
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Sky.jpg","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/Sky.xnb","TextureProcessor","Texture2DContent",268090,3686485,0.0648217
+"C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/SkyIsYours.jpg","C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/bin/Windows/Content/SkyIsYours.xnb","TextureProcessor","Texture2DContent",485090,3689365,0.0627378

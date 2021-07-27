@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SourceFileCollection xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Profile>Reach</Profile>
+  <Platform>Windows</Platform>
+  <Config />
+  <SourceFiles>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Button.png</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Button2.png</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/City2d.jpg</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/City2dRef.jpg</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/explosion.wav</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Font.spritefont</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/hit.wav</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Meteor.png</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Missile.png</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/OpeningSound.mp3</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Plane.png</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Plane2.png</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Poweup.png</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/reload.wav</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/ShotSound.wav</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/Sky.jpg</File>
+    <File>C:/Users/USER/source/repos/BoBo2D/BoBo2D/Content/SkyIsYours.jpg</File>
+  </SourceFiles>
+</SourceFileCollection>
