@@ -23,8 +23,12 @@ namespace BoBo2D
         SpaceShip player;
         SoundEffect MissileShot;
         KeyboardState PrevState;
+        MainMenu mainMenu;
+        Button playButton;
         List<Weapon> weapons = new List<Weapon>();
         List<Projectile> bullets = new List<Projectile>();
+        MouseState currentMouseState;
+        MouseState prevMouseState;
 
         public Bobo2D()
         {
@@ -45,6 +49,8 @@ namespace BoBo2D
             splashScreen = new SplashScreen(new Vector2(0, 0), Content.Load<Texture2D>("SkyIsYours"), Color.White, 6f, 6f, 1000);
             basicFont = Content.Load<SpriteFont>("Font");
             MissileShot = Content.Load<SoundEffect>("ShotSound");
+            playButton = new Button(new Rectangle(0, 0, 380, 160), basicFont, Content.Load<Texture2D>("Button2"), Color.White);
+            mainMenu = new MainMenu(new Vector2(0, 0), new Rectangle(1280, 720, 0, 0), Content.Load<Texture2D>("Sky"), Color.White, playButton);
             player = new SpaceShip(new Vector2(200, 400), Content.Load<Texture2D>("Plane2"), Color.White);
             Bullet = new Projectile(new Vector2(50, 50), Content.Load<Texture2D>("Missile"), new Vector2(500, 0), Color.White);
             Bullet.Enable();
@@ -53,6 +59,8 @@ namespace BoBo2D
             Bor = new Weapon("Bor", Bullet, Keys.W, MissileShot);
             weapons.Add(Missiles);
             weapons.Add(Bor);
+            currentMouseState = Mouse.GetState();
+            prevMouseState = currentMouseState;
         }
         protected override void Update(GameTime gameTime)
         {
@@ -61,41 +69,39 @@ namespace BoBo2D
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
             player.Velocity = new Vector2(0, 0);
-
+            prevMouseState = currentMouseState;
+            currentMouseState = Mouse.GetState();
+            CollisionWithButton();
+            KeyHandler();
+            player.Update(elapsed);
             foreach (Projectile p in bullets)
             {
                 p.Update(elapsed);
             }
-
-
-            KeyHandler();
-            player.Update(elapsed);
             base.Update(gameTime);
         }
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-
             _spriteBatch.Begin();
             splashScreen.DrawScreen(_spriteBatch);
-
             if (!splashScreen.IsEnable())
             {
-                _spriteBatch.DrawString(basicFont, "Selected Weapon: " + GetWeaponSelected().WeaponName, new Vector2(0, 60), Color.WhiteSmoke);
+                mainMenu.PrintMenu(_spriteBatch);
+            }
+            if (!mainMenu.IsEnable())
+            {
+                _spriteBatch.DrawString(basicFont, "Selected Weapon: " + GetWeaponSelected().WeaponName, new Vector2(0, 50), Color.WhiteSmoke);
+                _spriteBatch.DrawString(basicFont, "Press 1 to control ship with W/A/S/D", new Vector2(0, 10), Color.OrangeRed);
+                _spriteBatch.DrawString(basicFont, "Press 2 to control ship with Arrows", new Vector2(0, 30), Color.OrangeRed);
                 foreach (var p in bullets)
                 {
                     p.Draw(_spriteBatch);
                 }
                 player.Draw(_spriteBatch);
             }
-
             _spriteBatch.End();
-
             base.Draw(gameTime);
-        }
-        void CheckCollisions()
-        {
-
         }
         void KeyHandler()
         {
@@ -157,6 +163,17 @@ namespace BoBo2D
                 }
             }
             return null;
+        }
+        void CollisionWithButton()
+        {
+            Rectangle mouseRec = new Rectangle(1, 1, currentMouseState.X, currentMouseState.Y);
+            if (mouseRec.Intersects(playButton.Bounds))
+            {
+                if (currentMouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
+                {
+                    mainMenu.Disable();
+                }
+            }
         }
     }
 }
