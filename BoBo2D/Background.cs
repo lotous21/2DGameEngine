@@ -9,14 +9,16 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BoBo2D
 {
-    class MainMenu : Componenet
+    class Background : Componenet
     {
-        public MainMenu(Vector2 location, Rectangle bounds, Texture2D image, Color color)
+        public Background(Vector2 location, Rectangle bounds, Texture2D image, Color color)
         {
             this.Transform.Position = location;
             this.Bounds = bounds;
             this.Image = image;
             this.ImageColor = color;
+            this.Drawable = true;
+
             //this.PlayButton = button;
             //this.PlayButton.Transform.Position = new Vector2(430, 250);
         }

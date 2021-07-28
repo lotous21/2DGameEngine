@@ -11,8 +11,6 @@ namespace BoBo2D
     {
         private static float Gravity;
 
-
-
     public static bool AABB(Rectangle boxA, Rectangle boxB)
     {
         return boxA.Left < boxB.Right &&

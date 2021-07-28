@@ -10,6 +10,7 @@ namespace BoBo2D
 {
     class Componenet : IComponents
     {
+        public bool Drawable;
         public bool IsText;
         bool enabled;
         public SpriteFont TextFont;
@@ -18,25 +19,27 @@ namespace BoBo2D
         public Texture2D Image;
         public Rectangle Bounds;
         public Color ImageColor;
+        public float Alpha;
 
         public Componenet()
         {
             Transform = new Transform();
+            Alpha = 1f;
         }
 
         public void Draw(SpriteBatch sb)
         {
-            if (this.enabled && !IsText)
+            if (this.Drawable && this.enabled && !IsText)
             {
-                sb.Draw(this.Image, this.Transform.Position, this.ImageColor);
+                sb.Draw(this.Image, this.Transform.Position, this.ImageColor* Alpha);
             }
-            else if (this.enabled && IsText)
+            else if (this.Drawable && this.enabled && IsText)
             {
                 if (TextLabel == null)
                 {
-                    sb.DrawString(this.TextFont, "New Text", this.Transform.Position, this.ImageColor);
+                    sb.DrawString(this.TextFont, "New Text", this.Transform.Position, this.ImageColor* Alpha);
                 }
-                else sb.DrawString(this.TextFont, this.TextLabel, this.Transform.Position, this.ImageColor);
+                else sb.DrawString(this.TextFont, this.TextLabel, this.Transform.Position, this.ImageColor* Alpha);
             }
         }
 

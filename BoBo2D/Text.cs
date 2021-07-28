@@ -16,6 +16,7 @@ namespace BoBo2D
             this.TextLabel = label;
             this.ImageColor = color;
             this.Transform.Position = Location;
+            this.Drawable = true;
             this.Enable();
         }
     }

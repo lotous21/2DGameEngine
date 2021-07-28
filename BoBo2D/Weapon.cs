@@ -18,7 +18,6 @@ namespace BoBo2D
         public Keys KeyboardInput;
         public SoundEffect ShotSound;
 
-
         public Weapon(string Name, Projectile bullet, Keys keyboardInput, SoundEffect shot)
         {
             WeaponName = Name;
@@ -26,6 +25,8 @@ namespace BoBo2D
             Bullet = bullet;
             KeyboardInput = keyboardInput;
             ShotSound = shot;
+            this.Drawable = false;
         }
+
     }
 }

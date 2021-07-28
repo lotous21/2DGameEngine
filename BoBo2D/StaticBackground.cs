@@ -6,15 +6,19 @@ using System.Text;
 
 namespace BoBo2D
 {
-    class Enemy : Componenet
+    class StaticBackground : Componenet
     {
 
-        public Enemy(Vector2 location, Texture2D image, int velocity)
+        public StaticBackground(Vector2 location, Vector2 velocity, Texture2D image, Color color)
         {
             this.Transform.Position = location;
+            this.Transform.Velocity = velocity;
             this.Image = image;
-            this.Transform.Velocity = new Vector2(-velocity, 0);
-            this.Bounds = new Rectangle(0, 0, 28, 28);
+            this.ImageColor = color;
+            this.Drawable = true;
+
+            this.Bounds = new Rectangle(0, 0, 1280, 720);
+
         }
 
         public void Update(float elapsed)
@@ -23,9 +27,9 @@ namespace BoBo2D
             this.Bounds.X = (int)Transform.Position.X;
             this.Bounds.Y = (int)Transform.Position.Y;
 
-            if (this.Transform.Position.X < -20)
+            if (this.Bounds.Right < 0)
             {
-                this.Disable();
+                this.Transform.Position.X = 1281;
             }
         }
     }

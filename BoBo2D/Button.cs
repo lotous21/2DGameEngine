@@ -14,6 +14,7 @@ namespace BoBo2D
         MouseState prevMouseState;
         Rectangle mouseRec;
         bool clicked;
+        bool hoover;
 
         Text ButtonLabel;
 
@@ -26,6 +27,7 @@ namespace BoBo2D
             this.Image = image;
             this.ImageColor = color;
             this.Enable();
+            this.Drawable = true;
         }
         public void Invoke()
         {
@@ -38,7 +40,14 @@ namespace BoBo2D
             {
                 return true;
             }
-
+            return false;
+        }
+        public bool IsHover()
+        {
+            if (clicked)
+            {
+                return true;
+            }
             return false;
         }
         public void Update()
@@ -47,12 +56,14 @@ namespace BoBo2D
             currentMouseState = Mouse.GetState();
             if (mouseRec.Intersects(this.Bounds))
             {
+                hoover = true;
                 if (currentMouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
                 {
                     clicked = true;
                 }
                 else clicked = false;
             }
+            else hoover = false;
         }
     }
 }
