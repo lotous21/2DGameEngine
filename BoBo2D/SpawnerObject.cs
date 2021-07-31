@@ -3,16 +3,16 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 
 namespace BoBo2D
 {
     class SpawnerObject : Componenet
     {
-
-        public SpawnerObject(Vector2 location,Texture2D image, int vel, Color color)
+        public SpawnerObject(Vector2 location, Texture2D image, int vel, Color color)
         {
-            this.Image = image;
             this.Transform.Position = location;
+            this.Image = image;
             this.Transform.Velocity = new Vector2(-vel, 0);
             this.ImageColor = color;
             this.Enable();

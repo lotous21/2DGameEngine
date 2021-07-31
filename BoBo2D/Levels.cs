@@ -9,76 +9,48 @@ namespace BoBo2D
 {
     class Levels: Componenet
     {
-        Timer spawnTimer;
         Timer levelTimer;
-        Scenes activeScene;
-        List<SpawnerObject> spawnerObjects;
-        Texture2D objImage;
-        int objVel;
-        Color objColor;
+        public Scenes activeScene;
 
         public int Level { get; set; }
-        int spawnerTime;
-        int levelTime;
-        int upgradesToProceed;
-        int deceaseSpawnTime;
-        int decreaseLevelTime;
-        int increaseUpgradeToProceed;
+        public int LevelTime { get; set; }
+        public int UpgradesToProceed;
+        public int DeceaseSpawnTime;
+        public int DecreaseLevelTime;
+        public int IncreaseUpgradeToProceed;
 
-        bool levelChanged;
+        public bool levelChanged { get; set; }
 
-        public Levels(int _spawnTime, int _levelTime, int _decreaseSpawnTime, int _decreaseLevelTime, int _upgradeToProceed, int _increaseUpgradeToProcceed, List<SpawnerObject> spawnList, Texture2D spawnImage, int vel, Color color, Scenes attachedScene)
+        public Levels(int _levelTime, int _decreaseSpawnTime, int _decreaseLevelTime, int _upgradeToProceed, int _increaseUpgradeToProcceed,Scenes attachedScene)
         {
             Random rnd = new Random();
-            this.deceaseSpawnTime = _decreaseSpawnTime;
-            this.decreaseLevelTime = _decreaseLevelTime;
-            this.upgradesToProceed = _upgradeToProceed;
-            this.increaseUpgradeToProceed = _increaseUpgradeToProcceed;
-            this.levelTime = _levelTime;
+            this.DeceaseSpawnTime = _decreaseSpawnTime;
+            this.DecreaseLevelTime = _decreaseLevelTime;
+            this.UpgradesToProceed = _upgradeToProceed;
+            this.IncreaseUpgradeToProceed = _increaseUpgradeToProcceed;
+            this.LevelTime = _levelTime;
             this.Level = 1;
             this.activeScene = attachedScene;
-            this.spawnerTime = _spawnTime;
-            this.spawnerObjects = spawnList;
-            this.objImage = spawnImage;
-            this.objVel = vel;
-            this.objColor = color;
             levelTimer = new Timer();
             levelChanged = true;
             this.Enable();
-            spawnTimer = new Timer();
-            spawnTimer.Elapsed += delegate
-            {
-                if (activeScene.IsSceneActive())
-                {
-                    int xPos = rnd.Next(100, 700);
-                    SpawnerObject spawn = new SpawnerObject(new Vector2(1280, xPos), objImage, objVel, objColor);
-                    this.spawnerObjects.Add(spawn);
-                    spawn.Enable();
-                    spawn.Drawable = true;
-                }
-            };
             levelTimer.Elapsed += delegate
             {
-                spawnTimer.Enabled = false;
                 levelTimer.Enabled = false;
-                this.spawnerObjects.Clear();
                 Level++;
                 levelChanged = true;
-                spawnerTime -= deceaseSpawnTime;
-                levelTime -= decreaseLevelTime;
-                upgradesToProceed += increaseUpgradeToProceed;
+                LevelTime -= DecreaseLevelTime;
+                UpgradesToProceed += IncreaseUpgradeToProceed;
                 levelChanged = true;
             };
         }
 
         public void Update()
         {
-            if (levelChanged)
+            if (levelChanged && activeScene.IsSceneActive())
             {
-                spawnTimer.Enabled = true;
                 levelTimer.Enabled = true;
-                spawnTimer.Interval = spawnerTime;
-                levelTimer.Interval = levelTime;
+                levelTimer.Interval = LevelTime;
                 levelChanged = false;
             }
         }

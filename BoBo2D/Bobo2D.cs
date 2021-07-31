@@ -35,8 +35,8 @@ namespace BoBo2D
         Weapon Missiles;
         Weapon Bor;
         Levels level1;
-        SpawnerObject meteor;
-        Enemy en;
+        Spawner meteor;
+        Spawner reloads;
 
         KeyboardState PrevState;
         List<Weapon> weapons = new List<Weapon>();
@@ -79,7 +79,7 @@ namespace BoBo2D
             player = new SpaceShip(new Vector2(200, 400), Content.Load<Texture2D>("Plane2"), Color.White);
             playButton = new Button(new Rectangle(0, 0, 380, 160), playLabel, Content.Load<Texture2D>("Button2"), Color.White);
             playButton.Invoke();
-            GameControls = new Input(Keys.Up, Keys.Down, Keys.Right, Keys.Left, Keys.Space);
+            GameControls = new Input(Keys.Up, Keys.Down, Keys.Right, Keys.Left, Keys.Space, player);
 
             Projectile MissileBullet = new Projectile(new Vector2(-50, -50), Content.Load<Texture2D>("Missile"), new Vector2(500, 0), Color.White);
             MissileBullet.Disable();
@@ -97,7 +97,10 @@ namespace BoBo2D
             Text WeaponText1 = new Text(basicFont, Missiles.WeaponName + " / Input: " + Missiles.KeyboardInput, new Vector2(1140, 10), Color.Orange);
             staticBackground1 = new StaticBackground(new Vector2(0, 0), new Vector2(-50, 0), Content.Load<Texture2D>("City2d"), Color.White);
             staticBackground2 = new StaticBackground(new Vector2(1281, 0), new Vector2(-50, 0), Content.Load<Texture2D>("City2dRef"), Color.White);
-            level1 = new Levels(2000, 50000, 100, 500, 1, 1, spawnList, Content.Load<Texture2D>("Meteor"), 50, Color.White, GameScene);
+            level1 = new Levels(100000, 200, 500, 1, 1, GameScene);
+            meteor = new Spawner(level1, spawnList, Content.Load<Texture2D>("Meteor"), 50, Color.White, 2000);
+            reloads = new Spawner(level1, spawnList, Content.Load<Texture2D>("Poweup"), 50, Color.White, 3000);
+
             LevelText = new Text(basicFont, "Level: " + level1.Level.ToString(), new Vector2(600, 10), Color.Red);
 
             splashScreenObject = new GameObjects();
@@ -146,13 +149,16 @@ namespace BoBo2D
             {
                 p.Update(elapsed);
             }
-            foreach(SpawnerObject s in spawnList)
+            foreach (var s in spawnList.ToArray())
             {
                 s.Update(elapsed);
             }
             LevelText.label = "Level: " + level1.Level.ToString();
             LevelText.Update();
             level1.Update();
+            GameControls.Update();
+            meteor.Update(elapsed);
+            reloads.Update(elapsed);
             KeyHandler();
             UpdatedEntitied(elapsed);
             base.Update(gameTime);
@@ -197,7 +203,6 @@ namespace BoBo2D
             {
                 spawn.Draw(_spriteBatch);
             }
-            _spriteBatch.DrawString(basicFont, "Level: " + level1.Level, new Vector2( 50,50), Color.White);
 
             _spriteBatch.End();
 
@@ -205,26 +210,6 @@ namespace BoBo2D
         }
         void KeyHandler()
         {
-            if (Keyboard.GetState().IsKeyDown(GameControls.DownKey))
-            {
-                player.Transform.Velocity.Y = 500;
-                //background.Velocity.Y = -20;
-                //background2.Velocity.Y = -20;
-            }
-            if (Keyboard.GetState().IsKeyDown(GameControls.UpKey))
-            {
-                player.Transform.Velocity.Y = -500;
-                //background.Velocity.Y = +20;
-                //background2.Velocity.Y = +20;
-            }
-            if (Keyboard.GetState().IsKeyDown(GameControls.RighyKey))
-            {
-                player.Transform.Velocity.X = 500;
-            }
-            if (Keyboard.GetState().IsKeyDown(GameControls.LeftKey))
-            {
-                player.Transform.Velocity.X = -500;
-            }
             if (Keyboard.GetState().IsKeyDown(Missiles.KeyboardInput) && PrevState.IsKeyUp(Missiles.KeyboardInput))
             {
                 foreach (Weapon w in weapons)

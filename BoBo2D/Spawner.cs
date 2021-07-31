@@ -9,31 +9,70 @@ namespace BoBo2D
 {
     class Spawner : Componenet
     {
-        public int TimerTime { get; set; }
+        Timer timer;
+        Timer totalTimer;
+        int spawnTimer;
+        Levels levels;
 
-        public Spawner(int time, int leveltime, List<SpawnerObject> spawnList, Texture2D spawnImage, int vel, Color color, Scenes attachedScene)
+        bool activateSpawn;
+
+        public Spawner(Levels l, List<SpawnerObject> spawnList, Texture2D image, int vel, Color color, int spawnTime)
         {
             Random rnd = new Random();
-            this.TimerTime = time;
-            Timer timer = new Timer(TimerTime);
+
+            this.Image = image;
+            this.spawnTimer = spawnTime;
+            this.levels = l;
+            this.Transform.Velocity = new Vector2(-vel, 0);
+            this.ImageColor = color;
+            this.Enable();
+            this.Drawable = true;
+            activateSpawn = true;
+            timer = new Timer();
+            totalTimer = new Timer();
             timer.Elapsed += delegate
-            { 
-                if (attachedScene.IsSceneActive())
+            {
+                if (levels.activeScene.IsSceneActive())
                 {
-                    int xPos = rnd.Next(100, 700);
-                    SpawnerObject spawn = new SpawnerObject(new Vector2(1280, xPos), spawnImage, vel, color);
-                    spawnList.Add(spawn);
-                    spawn.Enable();
-                    spawn.Drawable = true;
+                    int xPos = rnd.Next(50, 650);
+                    SpawnerObject s = new SpawnerObject(new Vector2(1280, xPos), image, 50, color);
+                    spawnList.Add(s);
                 }
             };
-            timer.Enabled = true;
-            Timer lifetimelvel = new Timer(leveltime);
-            lifetimelvel.Elapsed += delegate { timer.Enabled = false; lifetimelvel.Enabled = false; this.Disable(); };
-            lifetimelvel.Enabled = true;
-            this.Enable();
+            totalTimer.Elapsed += delegate
+            {
+                //spawnList.Clear();
+                activateSpawn = true;
+                spawnTimer -= levels.DeceaseSpawnTime;
+            };
         }
+        public void Update(float elapsed)
+        {
+            //this.Transform.Position += this.Transform.Velocity * elapsed;
+            //this.Bounds.X = (int)this.Transform.Position.X;
+            //this.Bounds.Y = (int)this.Transform.Position.Y;
 
+            if (this.spawnTimer <= 100)
+            {
+                this.spawnTimer = 100;
+            }
+            if (levels.Level == 1 && levels.activeScene.IsSceneActive() && activateSpawn)
+            {
+                timer.Interval = spawnTimer;
+                totalTimer.Interval = levels.LevelTime;
+                timer.Enabled = true;
+                totalTimer.Enabled = true;
+                activateSpawn = false;
+            }
+            if (levels.levelChanged && levels.activeScene.IsSceneActive() && activateSpawn)
+            {
+                timer.Interval = spawnTimer;
+                totalTimer.Interval = levels.LevelTime;
+                timer.Enabled = true;
+                totalTimer.Enabled = true;
+                activateSpawn = false;
+            }
+        }
 
     }
 }
