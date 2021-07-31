@@ -36,7 +36,7 @@ namespace BoBo2D
 
         public void Update()
         {
-            if (this.fadeIn > 0) { this.Alpha += 1 / this.initialFadeIn; this.fadeIn--; this.ImageColor *= this.Alpha; }
+            if (this.fadeIn > 0) { this.Alpha += 1f / this.initialFadeIn; this.fadeIn--; }
             else if (this.fadeOut > 0) { this.Alpha -= 1 / this.initialFadeOut; this.fadeOut--; this.ImageColor *= this.Alpha; }
         }
 

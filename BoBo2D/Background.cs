@@ -18,19 +18,6 @@ namespace BoBo2D
             this.Image = image;
             this.ImageColor = color;
             this.Drawable = true;
-
-            //this.PlayButton = button;
-            //this.PlayButton.Transform.Position = new Vector2(430, 250);
         }
-
-        //public void PrintMenu (SpriteBatch sb)
-        //{
-        //    if (IsEnable())
-        //    {
-        //        sb.Draw(this.Image, this.Position, this.ImageColor);
-        //        sb.Draw(PlayButton.Image, PlayButton.Position, PlayButton.ImageColor);
-        //        sb.DrawString(PlayButton.ButtonLabel, "Play", new Vector2(600, 320), Color.OrangeRed);
-        //    }
-        //}
     }
 }

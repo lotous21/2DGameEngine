@@ -31,8 +31,9 @@ namespace BoBo2D
         }
         public void Invoke()
         {
-            mouseRec = new Rectangle(1, 1, currentMouseState.X, currentMouseState.Y);
+            mouseRec = new Rectangle(currentMouseState.X, currentMouseState.Y, 1, 1);
             clicked = false;
+
         }
         public bool IsClick()
         {
@@ -54,6 +55,7 @@ namespace BoBo2D
         {
             prevMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
+
             if (mouseRec.Intersects(this.Bounds))
             {
                 hoover = true;
@@ -64,6 +66,7 @@ namespace BoBo2D
                 else clicked = false;
             }
             else hoover = false;
+
         }
     }
 }

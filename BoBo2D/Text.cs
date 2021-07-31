@@ -9,15 +9,23 @@ namespace BoBo2D
 {
     class Text : Componenet
     {
-        public Text(SpriteFont font, string label, Vector2 Location, Color color)
+
+        public string label { get; set; }
+
+        public Text(SpriteFont font, string textlabel, Vector2 Location, Color color)
         {
             this.IsText = true;
+            this.TextLabel = textlabel;
             this.TextFont = font;
-            this.TextLabel = label;
             this.ImageColor = color;
             this.Transform.Position = Location;
             this.Drawable = true;
             this.Enable();
+        }
+
+        public void Update()
+        {
+            this.TextLabel = label;
         }
     }
 }

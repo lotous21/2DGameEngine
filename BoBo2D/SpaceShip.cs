@@ -9,6 +9,10 @@ namespace BoBo2D
     class SpaceShip : Componenet
     {
         public int BulletCount;
+        public int HP;
+        public int Shield;
+        int HpRegen;
+        int ShieldRegen;
 
         public SpaceShip(Vector2 location, Texture2D image, Color color)
         {
@@ -18,6 +22,8 @@ namespace BoBo2D
             this.Bounds = new Rectangle(0, 0, 128, 60);
             this.BulletCount = 5;
             this.Drawable = true;
+            this.HP = 100;
+            this.Shield = 100;
         }
 
         public void Update(float elapsed)
@@ -33,6 +39,15 @@ namespace BoBo2D
             if (this.Bounds.Bottom > 720)
             {
                 this.Transform.Position.Y = 720 - this.Bounds.Height;
+            }
+
+            if (HP > 100)
+            {
+                HP = 100;
+            }
+            if (Shield > 100)
+            {
+                Shield = 100;
             }
         }
     }

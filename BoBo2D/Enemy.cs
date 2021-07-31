@@ -8,13 +8,14 @@ namespace BoBo2D
 {
     class Enemy : Componenet
     {
-
-        public Enemy(Vector2 location, Texture2D image, int velocity)
+        public Enemy(Vector2 location, Texture2D image, int velocity, Color color)
         {
+            this.ImageColor = color;
             this.Transform.Position = location;
             this.Image = image;
             this.Transform.Velocity = new Vector2(-velocity, 0);
             this.Bounds = new Rectangle(0, 0, 28, 28);
+            this.Enable();
         }
 
         public void Update(float elapsed)
