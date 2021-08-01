@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Timers;
 
 namespace BoBo2D
 {
@@ -11,12 +12,24 @@ namespace BoBo2D
         public int BulletCount;
         public int HP;
         public int Shield;
-        int HpRegen;
-        int ShieldRegen;
+        public int MaxBullet;
+        Timer hpRegen;
+        Timer shieldRegen;
+        Timer totalTimer;
+        Levels level;
+        public int HpRegenSpeed { get; set; }
+        public int ShieldRegenSpeed { get; set; }
 
-        public SpaceShip(Vector2 location, Texture2D image, Color color)
+        int totalTimerSpeed;
+
+        bool ActivateTimer;
+        public bool ShieldDestroyed { get; set; }
+
+
+        public SpaceShip(Vector2 location, Texture2D image, Color color, Levels _level)
         {
             this.Transform.Position = location;
+            this.level = _level;
             this.Image = image;
             this.ImageColor = color;
             this.Bounds = new Rectangle(0, 0, 128, 60);
@@ -24,6 +37,20 @@ namespace BoBo2D
             this.Drawable = true;
             this.HP = 100;
             this.Shield = 100;
+            this.ActivateTimer = true;
+            this.MaxBullet = 5;
+            hpRegen = new Timer();
+            totalTimer = new Timer();
+            this.HpRegenSpeed = 1000;
+            this.ShieldDestroyed = false;
+            hpRegen.Elapsed += delegate
+            {
+                HP++;
+            };
+            totalTimer.Elapsed += delegate
+            {
+                ActivateTimer = true;
+            };
         }
 
         public void Update(float elapsed)
@@ -31,6 +58,7 @@ namespace BoBo2D
             this.Transform.Position += this.Transform.Velocity * elapsed;
             this.Bounds.X = (int)Transform.Position.X;
             this.Bounds.Y = (int)Transform.Position.Y;
+            totalTimerSpeed = level.LevelTime;
 
             if (this.Bounds.Top < 0)
             {
@@ -49,6 +77,35 @@ namespace BoBo2D
             {
                 Shield = 100;
             }
+            if (Shield <= 0)
+            {
+                Shield = 0;
+                ShieldDestroyed = true;
+            }
+
+            if (level.Level == 1 && ActivateTimer)
+            {
+                hpRegen.Interval = HpRegenSpeed;
+                hpRegen.Enabled = true;
+                totalTimer.Interval = totalTimerSpeed;
+                totalTimer.Enabled = true;
+                ActivateTimer = false;
+            }
+            else if (level.levelChanged && ActivateTimer)
+            {
+                HpRegenSpeed += 200;
+                hpRegen.Interval = HpRegenSpeed;
+                hpRegen.Enabled = true;
+                totalTimer.Interval = totalTimerSpeed;
+                totalTimer.Enabled = true;
+                ActivateTimer = false;
+            }
+
+            if (BulletCount >= MaxBullet)
+            {
+                BulletCount = MaxBullet;
+            }
+
         }
     }
 }

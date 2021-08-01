@@ -160,3 +160,5 @@ C:\Users\USER\Documents\GitHub\BoBo2D\BoBo2D\obj\Debug\netcoreapp3.1\BoBo2D.cspr
 C:\Users\USER\Documents\GitHub\BoBo2D\BoBo2D\obj\Debug\netcoreapp3.1\BoBo2D.dll
 C:\Users\USER\Documents\GitHub\BoBo2D\BoBo2D\obj\Debug\netcoreapp3.1\BoBo2D.pdb
 C:\Users\USER\Documents\GitHub\BoBo2D\BoBo2D\obj\Debug\netcoreapp3.1\BoBo2D.genruntimeconfig.cache
+C:\Users\USER\Documents\GitHub\BoBo2D\BoBo2D\bin\Debug\netcoreapp3.1\Content\Shield.xnb
+C:\Users\USER\Documents\GitHub\BoBo2D\BoBo2D\bin\Debug\netcoreapp3.1\Content\Plane3.xnb

@@ -24,7 +24,10 @@ namespace BoBo2D
             this.LeftKey = left;
             this.FireKey = fire;
         }
+        public Input()
+        {
 
+        }
         public void Update()
         {
             if (Keyboard.GetState().IsKeyDown(DownKey))
@@ -43,6 +46,20 @@ namespace BoBo2D
             {
                 player.Transform.Velocity.X = -500;
             }
+        }
+        public void WASD()
+        {
+            UpKey = Keys.W;
+            DownKey = Keys.S;
+            RighyKey = Keys.D;
+            LeftKey = Keys.A;
+        }
+        public void Arrows()
+        {
+            UpKey = Keys.Up;
+            DownKey = Keys.Down;
+            RighyKey = Keys.Right;
+            LeftKey = Keys.Left;
         }
     }
 }

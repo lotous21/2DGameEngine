@@ -16,6 +16,8 @@ namespace BoBo2D
         public const int GAME_HEIGHT = 720;
         public const int GAME_WIDTH = 1280;
 
+        int score;
+
         GameObjects splashScreenObject;
         GameObjects mainMenuObject;
         GameObjects playerObject;
@@ -37,18 +39,30 @@ namespace BoBo2D
         Levels level1;
         Spawner meteor;
         Spawner reloads;
+        Spawner shields;
+        Spawner enemy;
 
         KeyboardState PrevState;
         List<Weapon> weapons = new List<Weapon>();
         List<Projectile> bullets = new List<Projectile>();
+        List<Projectile> enemyBullet = new List<Projectile>();
         List<SpawnerObject> spawnList = new List<SpawnerObject>();
 
         Text LevelText;
+        Text BulletCountText;
+        Text playerHealthText;
+        Text playerShieldText;
+        Text playerScoreText;
+        Text selectedWeaponText;
 
         Scenes OpeningScene;
         Scenes GameScene;
+        Scenes FinalScene;
 
         List<Scenes> AllScenes;
+
+        SoundEffect HitSound;
+        SoundEffect ReloadSound;
 
         public Bobo2D()
         {
@@ -76,14 +90,15 @@ namespace BoBo2D
             splashScreen = new SplashScreen(new Vector2(0, 0), Content.Load<Texture2D>("SkyIsYours"), Color.White, 3f, 3f, 1000);
             Text playLabel = new Text(basicFont, "Play!", new Vector2(0, 0), Color.White);
             Background mainMenu = new Background(new Vector2(0, 0), new Rectangle(1280, 720, 0, 0), Content.Load<Texture2D>("Sky"), Color.White);
-            player = new SpaceShip(new Vector2(200, 400), Content.Load<Texture2D>("Plane2"), Color.White);
             playButton = new Button(new Rectangle(0, 0, 380, 160), playLabel, Content.Load<Texture2D>("Button2"), Color.White);
             playButton.Invoke();
-            GameControls = new Input(Keys.Up, Keys.Down, Keys.Right, Keys.Left, Keys.Space, player);
 
             Projectile MissileBullet = new Projectile(new Vector2(-50, -50), Content.Load<Texture2D>("Missile"), new Vector2(500, 0), Color.White);
             MissileBullet.Disable();
             SoundEffect MissileShot = Content.Load<SoundEffect>("ShotSound");
+            HitSound = Content.Load<SoundEffect>("hit");
+            ReloadSound = Content.Load<SoundEffect>("reload");
+
             Missiles = new Weapon("Missiles", MissileBullet, Keys.D1, MissileShot);
             Bor = new Weapon("Bor", MissileBullet, Keys.D2, MissileShot);
             Missiles.Disable();
@@ -93,15 +108,30 @@ namespace BoBo2D
             weapons.Add(Missiles);
             weapons.Add(Bor);
             bullets.Add(MissileBullet);
-            Text SelectedWeaponText = new Text(basicFont, "Selected Weapon: " + GetWeaponSelected().WeaponName, new Vector2(10, 10), Color.Green);
+
+            selectedWeaponText = new Text(basicFont, "Selected Weapon: " + GetWeaponSelected().WeaponName, new Vector2(10, 10), Color.Green);
             Text WeaponText1 = new Text(basicFont, Missiles.WeaponName + " / Input: " + Missiles.KeyboardInput, new Vector2(1140, 10), Color.Orange);
+            Text WeaponText2 = new Text(basicFont, Bor.WeaponName + " / Input: " + Bor.KeyboardInput, new Vector2(1140, 30), Color.Orange);
+
             staticBackground1 = new StaticBackground(new Vector2(0, 0), new Vector2(-50, 0), Content.Load<Texture2D>("City2d"), Color.White);
             staticBackground2 = new StaticBackground(new Vector2(1281, 0), new Vector2(-50, 0), Content.Load<Texture2D>("City2dRef"), Color.White);
-            level1 = new Levels(100000, 200, 500, 1, 1, GameScene);
-            meteor = new Spawner(level1, spawnList, Content.Load<Texture2D>("Meteor"), 50, Color.White, 2000);
-            reloads = new Spawner(level1, spawnList, Content.Load<Texture2D>("Poweup"), 50, Color.White, 3000);
 
+            level1 = new Levels(10000, 100, 500, 1, 1, GameScene);
+
+            meteor = new Spawner(level1, spawnList, Content.Load<Texture2D>("Meteor"), 50, Color.White, 2000, false, true, false, false);
+            reloads = new Spawner(level1, spawnList, Content.Load<Texture2D>("Poweup"), 50, Color.White, 7150, false, false, true, false);
+            shields = new Spawner(level1, spawnList, Content.Load<Texture2D>("Shield"), 50, Color.White, 11750, false, false, false, true);
+            enemy = new Spawner(level1, spawnList, Content.Load<Texture2D>("Plane3"), 50, Color.White, 8660, true, true, false, false);
+
+            player = new SpaceShip(new Vector2(200, 400), Content.Load<Texture2D>("Plane2"), Color.White, level1);
+
+            BulletCountText = new Text(basicFont, "Bullets: " + player.BulletCount, new Vector2(10, 30), Color.White);
+            playerHealthText = new Text(basicFont, "HP: " + player.HP, new Vector2(10, 600), Color.Red);
+            playerShieldText = new Text(basicFont, "Shield: " + player.Shield, new Vector2(10, 620), Color.Red);
+            playerScoreText = new Text(basicFont, "Score: " + score, new Vector2(10, 640), Color.White);
             LevelText = new Text(basicFont, "Level: " + level1.Level.ToString(), new Vector2(600, 10), Color.Red);
+
+            GameControls = new Input(Keys.Up, Keys.Down, Keys.Right, Keys.Left, Keys.Space, player);
 
             splashScreenObject = new GameObjects();
             splashScreenObject.AddComponenet(splashScreen);
@@ -117,16 +147,20 @@ namespace BoBo2D
             playerObject.AddComponenet(MissileBullet);
 
             uiObject = new GameObjects();
-            uiObject.AddComponenet(SelectedWeaponText);
+            uiObject.AddComponenet(selectedWeaponText);
             uiObject.AddComponenet(LevelText);
             uiObject.AddComponenet(WeaponText1);
+            uiObject.AddComponenet(WeaponText2);
+            uiObject.AddComponenet(BulletCountText);
+            uiObject.AddComponenet(playerHealthText);
+            uiObject.AddComponenet(playerShieldText);
+            uiObject.AddComponenet(playerScoreText);
 
             backgroundsObject = new GameObjects();
             backgroundsObject.AddComponenet(staticBackground1);
             backgroundsObject.AddComponenet(staticBackground2);
 
             GameManagerObj = new GameObjects();
-
 
             OpeningScene.AddGameObject(mainMenuObject);
             OpeningScene.AddGameObject(splashScreenObject);
@@ -145,46 +179,117 @@ namespace BoBo2D
             {
                 GameScene.ActivateScene();
             }
-            foreach(Projectile p in bullets)
+
+            foreach (SpawnerObject s in spawnList.ToArray())
+            {
+                s.Update(elapsed);
+
+                if (s.IsFire)
+                {
+                    s.BulletImage = Content.Load<Texture2D>("Missile");
+                    s.projectiles = enemyBullet;
+                }
+            }
+            foreach (Projectile p in bullets.ToArray())
             {
                 p.Update(elapsed);
             }
-            foreach (var s in spawnList.ToArray())
-            {
-                s.Update(elapsed);
-            }
-            LevelText.label = "Level: " + level1.Level.ToString();
-            LevelText.Update();
-            level1.Update();
-            GameControls.Update();
+
             meteor.Update(elapsed);
             reloads.Update(elapsed);
+            shields.Update(elapsed);
+            enemy.Update(elapsed);
+
+            staticBackground1.Update(elapsed);
+            staticBackground2.Update(elapsed);
+
+            player.Update(elapsed);
+
+            if (score < 0)
+            {
+                score = 0;
+            }
+
             KeyHandler();
             UpdatedEntitied(elapsed);
             CheckCollisions();
+
             base.Update(gameTime);
         }
         void UpdatedEntitied(float elapsed)
         {
-            staticBackground1.Update(elapsed);
-            staticBackground2.Update(elapsed);
             splashScreen.Update();
-            player.Update(elapsed);
+
             player.Transform.Velocity = new Vector2(0, 0);
-            foreach (Projectile p in bullets)
-            {
-                p.Update(elapsed);
-            }
-            foreach (SpawnerObject s in spawnList)
+
+            playButton.Update();
+
+            foreach (SpawnerObject s in spawnList.ToArray())
             {
                 s.Update(elapsed);
             }
-            playButton.Update();
+            foreach (Projectile p in bullets.ToArray())
+            {
+                p.Update(elapsed);
+            }
+            foreach (Projectile h in enemyBullet.ToArray())
+            {
+                h.Update(elapsed);
+            }
+
             BlankGame();
+
             if (playButton.IsClick())
             {
                 OpeningScene.DeactivateScene();
             }
+
+            selectedWeaponText.label = "Selected Weapon: " + GetWeaponSelected().WeaponName;
+            selectedWeaponText.Update();
+
+            LevelText.label = "Level: " + level1.Level.ToString();
+            LevelText.Update();
+
+            BulletCountText.label = "Bullets: " + player.BulletCount;
+            BulletCountText.Update();
+
+            playerHealthText.label = "HP: " + player.HP;
+            playerHealthText.Update();
+
+            playerShieldText.label = "Shield: " + player.Shield;
+            playerShieldText.Update();
+
+            playerScoreText.label = "Score: " + score;
+            playerScoreText.Update();
+
+            if (player.HP >= 0 && player.HP <= 30)
+            {
+                playerHealthText.ImageColor = Color.Red;
+            }
+            if (player.HP >= 31 && player.HP <= 70)
+            {
+                playerHealthText.ImageColor = Color.Orange;
+            }
+            if (player.HP >= 71 && player.HP <= 100)
+            {
+                playerHealthText.ImageColor = Color.Green;
+            }
+
+            if (player.Shield >= 0 && player.Shield <= 30)
+            {
+                playerShieldText.ImageColor = Color.Red;
+            }
+            if (player.Shield >= 31 && player.Shield <= 70)
+            {
+                playerShieldText.ImageColor = Color.Orange;
+            }
+            if (player.Shield >= 71 && player.Shield <= 100)
+            {
+                playerShieldText.ImageColor = Color.Green;
+            }
+
+            level1.Update();
+            GameControls.Update();
         }
         protected override void Draw(GameTime gameTime)
         {
@@ -203,6 +308,10 @@ namespace BoBo2D
             foreach(var spawn in spawnList.ToArray())
             {
                 spawn.Draw(_spriteBatch);
+            }
+            foreach (var eBullet in enemyBullet.ToArray())
+            {
+                eBullet.Draw(_spriteBatch);
             }
 
             _spriteBatch.End();
@@ -229,13 +338,14 @@ namespace BoBo2D
 
                 Bor.IsSelected = true;
             }
-            if (Keyboard.GetState().IsKeyDown(GameControls.FireKey) && PrevState.IsKeyUp(GameControls.FireKey))
+            if (Keyboard.GetState().IsKeyDown(GameControls.FireKey) && PrevState.IsKeyUp(GameControls.FireKey) && player.BulletCount > 0)
             {
                 Projectile p = new Projectile(GetWeaponSelected().Bullet.Transform.Position, GetWeaponSelected().Bullet.Image, GetWeaponSelected().Bullet.Transform.Velocity, Color.White);
                 bullets.Add(p);
                 p.Enable();
                 p.Transform.Position = new Vector2(player.Transform.Position.X, player.Transform.Position.Y + 15);
                 GetWeaponSelected().ShotSound.Play();
+                player.BulletCount--;
             }
 
             PrevState = Keyboard.GetState();
@@ -251,8 +361,6 @@ namespace BoBo2D
             }
             return null;
         }
-
-
         void BlankGame()
         {
             if (AllScenes.Count == 0)
@@ -266,7 +374,6 @@ namespace BoBo2D
                 g.AddComponenet(t);
             }
         }
-
         void CheckCollisions()
         {
             foreach (var b in bullets.ToArray())
@@ -275,10 +382,131 @@ namespace BoBo2D
                 {
                     if (b.Bounds.Intersects(s.Bounds))
                     {
-                        bullets.Remove(b);
+                        if (s.IsFire)
+                        {
+                            score += 50;
+                            bullets.Remove(b);
+                            spawnList.Remove(s);
+                            s.Disable();
+                            b.Disable();
+                        }
+                        if (s.IsDamage)
+                        {
+                            score += 10;
+                            bullets.Remove(b);
+                            spawnList.Remove(s);
+                            s.Disable();
+                            b.Disable();
+                        }
+                        if (s.IsReload)
+                        {
+                            score -= 20;
+                            bullets.Remove(b);
+                            spawnList.Remove(s);
+                            s.Disable();
+                            b.Disable();
+                        }
+                        if (s.IsShield)
+                        {
+                            score -= 20;
+                            bullets.Remove(b);
+                            spawnList.Remove(s);
+                            s.Disable();
+                            b.Disable();
+                        }
+                    }
+                }
+            }
+
+            foreach (var s in spawnList.ToArray())
+            {
+                if (player.Bounds.Intersects(s.Bounds))
+                {
+                    if (s.IsDamage)
+                    {
+                        HitSound.Play();
+                        if (player.Shield <= 0)
+                        {
+                            player.HP -= 20;
+                        }
+                        else if (player.Shield > 0)
+                        {
+                            player.Shield -= 20;
+                        }
+                        else
+                        {
+                            player.HP -= 20;
+                        }
+                        spawnList.Remove(s);
+                        s.Disable();
+                    }
+                    if (s.IsReload)
+                    {
+                        ReloadSound.Play();
+                        player.BulletCount += 5;
+                        spawnList.Remove(s);
+
+                    }
+                    if (s.IsShield)
+                    {
+                        player.ShieldDestroyed = false;
+                        player.Shield = 100;
                         spawnList.Remove(s);
                     }
                 }
+            }
+
+            foreach (var h in enemyBullet.ToArray())
+            {
+                if (player.Bounds.Intersects(h.Bounds))
+                {
+                    HitSound.Play();
+                    if (player.Shield <= 0)
+                    {
+                        player.HP -= 50;
+                    }
+                    else if (player.Shield > 0)
+                    {
+                        player.Shield -= 50;
+                    }
+                    else
+                    {
+                        player.HP -= 50;
+                    }
+                    enemyBullet.Remove(h);
+                }
+            }
+
+            foreach (var h in enemyBullet.ToArray())
+            {
+                foreach (var c in bullets.ToArray())
+                {
+                    if (h.Bounds.Intersects(c.Bounds))
+                    {
+                        bullets.Remove(c);
+                        c.Disable();
+                        enemyBullet.Remove(h);
+                        h.Disable();
+                    }
+                }
+            }
+
+            if (player.HP <= 0)
+            {
+                AllScenes.Clear();
+                bullets.Clear();
+                spawnList.Clear();
+                enemyBullet.Clear();
+                player.Disable(); 
+                Text t = new Text(basicFont, "Game Over", new Vector2(550, 300), Color.Red);
+                Text t2 = new Text(basicFont, "Score: " + score , new Vector2(550, 320), Color.White);
+                GameObjects g = new GameObjects();
+                Scenes s = new Scenes();
+                s.ActivateScene();
+                AllScenes.Add(s);
+                s.AddGameObject(g);
+                g.AddComponenet(t);
+                g.AddComponenet(t2);
             }
         }
     }

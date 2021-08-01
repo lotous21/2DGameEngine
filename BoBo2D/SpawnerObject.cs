@@ -9,8 +9,20 @@ namespace BoBo2D
 {
     class SpawnerObject : Componenet
     {
-        public SpawnerObject(Vector2 location, Texture2D image, int vel, Color color, Rectangle bounds)
+        public bool IsFire;
+        public bool IsDamage;
+        public bool IsReload;
+        public bool IsShield;
+
+        public Texture2D BulletImage;
+        public List <Projectile> projectiles = new List<Projectile>();
+
+        public SpawnerObject(Vector2 location, Texture2D image, int vel, Color color, Rectangle bounds, bool fire, bool damage, bool realod, bool shield)
         {
+            this.IsFire = fire;
+            this.IsDamage = damage;
+            this.IsReload = realod;
+            this.IsShield = shield;
             this.Bounds = bounds;
             this.Transform.Position = location;
             this.Image = image;
@@ -18,6 +30,22 @@ namespace BoBo2D
             this.ImageColor = color;
             this.Enable();
             this.Drawable = true;
+            Timer fireTimer = new Timer(1500);
+            if (IsFire)
+            {
+                this.Bounds = new Rectangle(0, 0, 128, 60);
+                fireTimer.Elapsed += delegate
+                {
+                    if (this.IsEnable())
+                    {
+                        Projectile p = new Projectile(new Vector2(-50, -50), BulletImage, new Vector2(-500, 0), Color.White);
+                        p.Transform.Position = new Vector2(this.Transform.Position.X, this.Transform.Position.Y + 15);
+                        projectiles.Add(p);
+                        p.Enable();
+                    }
+                };
+                fireTimer.Enabled = true;
+            }
         }
         public void Update(float elapsed)
         {

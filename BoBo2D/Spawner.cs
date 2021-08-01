@@ -16,10 +16,18 @@ namespace BoBo2D
 
         bool activateSpawn;
 
-        public Spawner(Levels l, List<SpawnerObject> spawnList, Texture2D image, int vel, Color color, int spawnTime)
+        public bool IsFire;
+        public bool IsDamage;
+        public bool IsReload;
+        public bool IsShield;
+
+        public Spawner(Levels l, List<SpawnerObject> spawnList, Texture2D image, int vel, Color color, int spawnTime, bool fire, bool damage, bool reload, bool shield)
         {
             Random rnd = new Random();
-
+            this.IsFire = fire;
+            this.IsDamage = damage;
+            this.IsReload = reload;
+            this.IsShield = shield;
             this.Image = image;
             this.spawnTimer = spawnTime;
             this.levels = l;
@@ -35,23 +43,18 @@ namespace BoBo2D
                 if (levels.activeScene.IsSceneActive())
                 {
                     int xPos = rnd.Next(50, 650);
-                    SpawnerObject s = new SpawnerObject(new Vector2(1280, xPos), image, 50, color, new Rectangle(0,0, 28,28));
+                    SpawnerObject s = new SpawnerObject(new Vector2(1280, xPos), image, 50, color, new Rectangle(0,0, 28,28), this.IsFire, this.IsDamage, this.IsReload, this.IsShield);
                     spawnList.Add(s);
                 }
             };
             totalTimer.Elapsed += delegate
             {
-                //spawnList.Clear();
                 activateSpawn = true;
                 spawnTimer -= levels.DeceaseSpawnTime;
             };
         }
         public void Update(float elapsed)
         {
-            //this.Transform.Position += this.Transform.Velocity * elapsed;
-            //this.Bounds.X = (int)this.Transform.Position.X;
-            //this.Bounds.Y = (int)this.Transform.Position.Y;
-
             if (this.spawnTimer <= 100)
             {
                 this.spawnTimer = 100;
@@ -66,11 +69,21 @@ namespace BoBo2D
             }
             if (levels.levelChanged && levels.activeScene.IsSceneActive() && activateSpawn)
             {
+                spawnTimer -= levels.DeceaseSpawnTime;
+                if (spawnTimer <= 100)
+                {
+                    spawnTimer = 100;
+                }
                 timer.Interval = spawnTimer;
                 totalTimer.Interval = levels.LevelTime;
                 timer.Enabled = true;
                 totalTimer.Enabled = true;
                 activateSpawn = false;
+            }
+            if (!levels.activeScene.IsSceneActive())
+            {
+                timer.Enabled = false;
+                totalTimer.Enabled = false;
             }
         }
 
