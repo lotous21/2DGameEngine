@@ -9,8 +9,9 @@ namespace BoBo2D
 {
     class SpawnerObject : Componenet
     {
-        public SpawnerObject(Vector2 location, Texture2D image, int vel, Color color)
+        public SpawnerObject(Vector2 location, Texture2D image, int vel, Color color, Rectangle bounds)
         {
+            this.Bounds = bounds;
             this.Transform.Position = location;
             this.Image = image;
             this.Transform.Velocity = new Vector2(-vel, 0);

@@ -35,7 +35,7 @@ namespace BoBo2D
                 if (levels.activeScene.IsSceneActive())
                 {
                     int xPos = rnd.Next(50, 650);
-                    SpawnerObject s = new SpawnerObject(new Vector2(1280, xPos), image, 50, color);
+                    SpawnerObject s = new SpawnerObject(new Vector2(1280, xPos), image, 50, color, new Rectangle(0,0, 28,28));
                     spawnList.Add(s);
                 }
             };

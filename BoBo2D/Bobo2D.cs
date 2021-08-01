@@ -161,6 +161,7 @@ namespace BoBo2D
             reloads.Update(elapsed);
             KeyHandler();
             UpdatedEntitied(elapsed);
+            CheckCollisions();
             base.Update(gameTime);
         }
         void UpdatedEntitied(float elapsed)
@@ -191,15 +192,15 @@ namespace BoBo2D
 
             _spriteBatch.Begin();
 
-            foreach(var scenes in AllScenes)
+            foreach(var scenes in AllScenes.ToArray())
             {
                 scenes.DrawAllObjects(_spriteBatch);
             }
-            foreach(var bullet in bullets)
+            foreach(var bullet in bullets.ToArray())
             {
                 bullet.Draw(_spriteBatch);
             }
-            foreach(var spawn in spawnList)
+            foreach(var spawn in spawnList.ToArray())
             {
                 spawn.Draw(_spriteBatch);
             }
@@ -263,6 +264,21 @@ namespace BoBo2D
                 AllScenes.Add(s);
                 s.AddGameObject(g);
                 g.AddComponenet(t);
+            }
+        }
+
+        void CheckCollisions()
+        {
+            foreach (var b in bullets.ToArray())
+            {
+                foreach (var s in spawnList.ToArray())
+                {
+                    if (b.Bounds.Intersects(s.Bounds))
+                    {
+                        bullets.Remove(b);
+                        spawnList.Remove(s);
+                    }
+                }
             }
         }
     }
