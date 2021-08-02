@@ -7,6 +7,7 @@ using System.Timers;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using BoBo2D.ClientComponents;
 
 namespace BoBo2D
 {
@@ -30,7 +31,7 @@ namespace BoBo2D
         GameObjects uiObject;
         GameObjects backgroundsObject;
         GameObjects gameManagerObj;
-        GameObjects upgradeUiObj;
+        GameObjects upgradeObj;
         GameObjects spawnerObj;
         GameObjects weaponsObj;
 
@@ -79,7 +80,7 @@ namespace BoBo2D
         SoundEffect hitSound;
         SoundEffect reloadSound;
 
-        Song backgroundMusic;
+        BackgroundMusic backgroundMusic;
 
         Video intro;
         LogoIntro logoIntro;
@@ -114,11 +115,15 @@ namespace BoBo2D
             //PAY ATTENTION
             //All times are in milleseconds, 1 seonds = 1000 millesconds;
 
+            #region Load\Declared Content
+
             basicFont = Content.Load<SpriteFont>("Font");
             intro = Content.Load<Video>("intro2");
 
-            logoIntro = new LogoIntro(intro);
+            logoIntro = new LogoIntro(intro, logoScene, openingScene);
             splashScreen = new SplashScreen(new Vector2(0, 0), Content.Load<Texture2D>("SkyIsYours2"), Color.White, 3f, 3f, 6000);
+
+            backgroundMusic = new BackgroundMusic(Content.Load<Song>("Master"), gameScene);
 
             Text playLabel = new Text(basicFont, "Play!", new Vector2(0, 0), Color.White);
             Background mainMenu = new Background(new Vector2(0, 0), new Rectangle(1280, 720, 0, 0), Content.Load<Texture2D>("Sky"), Color.White);
@@ -133,7 +138,6 @@ namespace BoBo2D
 
             hitSound = Content.Load<SoundEffect>("hit");
             reloadSound = Content.Load<SoundEffect>("reload");
-            backgroundMusic = Content.Load<Song>("Master");
 
             missiles = new Weapon("Missiles", missileBullet, Keys.D1, missileShot, weapons);
             bor = new Weapon("Bor", missileBullet, Keys.D2, missileShot, weapons);
@@ -166,7 +170,7 @@ namespace BoBo2D
             spawners.Add(shields);
             spawners.Add(enemy);
 
-            levels.spawners = spawners;
+            levels.SpawnersList = spawners;
 
             player = new SpaceShip(new Vector2(200, 400), 200, Content.Load<Texture2D>("Plane2"), Color.White, levels);
 
@@ -183,6 +187,10 @@ namespace BoBo2D
             gameControls.Arrows();
 
             playBackground = true;
+
+            #endregion
+
+            #region GameObjects Modify
 
             introObject = new GameObjects();
             introObject.AddComponenet(logoIntro);
@@ -214,18 +222,23 @@ namespace BoBo2D
 
             gameManagerObj = new GameObjects();
             gameManagerObj.AddComponenet(gameControls);
+            gameManagerObj.AddComponenet(backgroundMusic);
 
             weaponsObj = new GameObjects();
             weaponsObj.AddComponenet(missiles);
             weaponsObj.AddComponenet(bor);
 
-            upgradeUiObj = new GameObjects();
-            upgradeUiObj.AddComponenet(logUpgradeText);
-            upgradeUiObj.AddComponenet(confirmText);
+            upgradeObj = new GameObjects();
 
-            speedUpgrade = new Upgrade("Moving Speed", 100, true, Keys.Z, 100, upgradeUiObj, logUpgradeText, basicFont, levels, new Vector2 (300,300), 1000, spawners);
-            hpRegenUpgrade = new Upgrade("HP Regeneration", 200, false, Keys.X, 150, upgradeUiObj, logUpgradeText, basicFont, levels, new Vector2(300, 320), 100, spawners);
-            maxBulletUpgarde = new Upgrade("Max Bullets", 1, true, Keys.C, 200, upgradeUiObj, logUpgradeText, basicFont, levels, new Vector2(300, 340), 15, spawners);
+            speedUpgrade = new Upgrade("Moving Speed", 100, true, Keys.Z, 100, upgradeObj, logUpgradeText, basicFont, levels, new Vector2 (300,300), 1000);
+            hpRegenUpgrade = new Upgrade("HP Regeneration", 200, false, Keys.X, 150, upgradeObj, logUpgradeText, basicFont, levels, new Vector2(300, 320), 100);
+            maxBulletUpgarde = new Upgrade("Max Bullets", 1, true, Keys.C, 200, upgradeObj, logUpgradeText, basicFont, levels, new Vector2(300, 340), 15);
+
+            upgradeObj.AddComponenet(logUpgradeText);
+            upgradeObj.AddComponenet(confirmText);
+            upgradeObj.AddComponenet(speedUpgrade);
+            upgradeObj.AddComponenet(hpRegenUpgrade);
+            upgradeObj.AddComponenet(maxBulletUpgarde);
 
             spawnerObj = new GameObjects();
             spawnerObj.AddComponenet(meteor);
@@ -233,6 +246,10 @@ namespace BoBo2D
             spawnerObj.AddComponenet(shields);
             spawnerObj.AddComponenet(enemy);
             spawnerObj.AddComponenet(levels);
+
+            #endregion
+
+            #region Scenes Modify
 
             logoScene.AddGameObject(introObject);
 
@@ -244,8 +261,10 @@ namespace BoBo2D
             gameScene.AddGameObject(playerObject);
             gameScene.AddGameObject(uiObject);
             gameScene.AddGameObject(spawnerObj);
-            gameScene.AddGameObject(upgradeUiObj);
+            gameScene.AddGameObject(upgradeObj);
             gameScene.AddGameObject(weaponsObj);
+
+            #endregion
         }
 
         protected override void Update (GameTime gameTime)
@@ -255,40 +274,12 @@ namespace BoBo2D
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (logoIntro.ExitScene)
-            {
-                logoScene.DeactivateScene();
-                openingScene.ActivateScene();
-            }
-
             if (playButton.IsClick())
             {
                 openingScene.DeactivateScene();
                 gameScene.ActivateScene();
             }
 
-            if (gameScene.IsSceneActive() && playBackground)
-            {
-                MediaPlayer.Play(backgroundMusic);
-                playBackground = false;
-            }
-
-            if (levels.IsLevelCompleted)
-            {
-                upgradeUiObj.Enable();
-            }
-            else upgradeUiObj.Disable();
-
-            foreach (SpawnerObject s in spawnList.ToArray())
-            {
-                s.Update(elapsed);
-
-                if (s.IsFire)
-                {
-                    s.BulletImage = Content.Load<Texture2D>("Missile");
-                    s.ProjectilesList = enemyBullet;
-                }
-            }
             foreach (Projectile p in bullets.ToArray())
             {
                 p.Update(elapsed);
@@ -300,6 +291,16 @@ namespace BoBo2D
             foreach (Scenes s in allScenes.ToArray())
             {
                 s.UpdateAllObjects(elapsed);
+            }
+            foreach (SpawnerObject s in spawnList.ToArray())
+            {
+                s.Update(elapsed);
+
+                if (s.IsFire)
+                {
+                    s.BulletImage = Content.Load<Texture2D>("Missile");
+                    s.ProjectilesList = enemyBullet;
+                }
             }
 
             speedUpgrade.FixedUpdate(ref player.MovingSpeed, ref score, ref upgradeLog);
@@ -325,7 +326,6 @@ namespace BoBo2D
             }
 
             checkCollisions();
-
             blankGame();
 
             selectedWeaponText.Label = "Selected Weapon: " + getWeaponSelected().WeaponName;
@@ -545,6 +545,10 @@ namespace BoBo2D
                 spawnList.Clear();
                 enemyBullet.Clear();
                 player.Disable(); 
+                foreach (Spawner h in spawners.ToArray())
+                {
+                    h.ActivateSpawn = false;
+                }
                 Text t = new Text(basicFont, "Game Over", new Vector2(550, 300), Color.Red);
                 Text t2 = new Text(basicFont, "Score: " + score, new Vector2(550, 320), Color.White);
                 GameObjects g = new GameObjects();

@@ -6,14 +6,6 @@ using System.Threading.Tasks;
 
 namespace BoBo2D
 {
- //   class Node
- //   {
- //       GameObjects data;
- //       Node leftChiled;
- //       Node rightChiled;
- //   };
-
-
     class TreeDataStruct : IEnumerable<Node>
     {
         public Node Root;

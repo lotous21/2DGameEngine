@@ -24,11 +24,8 @@ namespace BoBo2D
         Text upgradeText;
         Levels levels;
 
-        List<Spawner> spawners;
-
-        public Upgrade(string name, int changeValue, bool increase, Keys input, int cost, GameObjects attached, Text text, SpriteFont font, Levels _level, Vector2 upgradeTextPos, int max, List<Spawner> _spawners)
+        public Upgrade(string name, int changeValue, bool increase, Keys input, int cost, GameObjects attached, Text _logText, SpriteFont font, Levels _level, Vector2 upgradeTextPos, int max)
         {
-            this.spawners = _spawners;
             this.upgradeName = name;
             this.maxValue = max;
             this.valueToChange = changeValue;
@@ -36,9 +33,9 @@ namespace BoBo2D
             this.upgradeKey = input;
             this.costUpgrade = cost;
             this.attachedObj = attached;
-            this.logText = text;
             this.upgradeTextFont = font;
             this.levels = _level;
+            this.logText = _logText;
             upgradeText = new Text(upgradeTextFont, "Press " + upgradeKey + " to Upgrade Your " + upgradeName + " || Cost = " + costUpgrade + " || Curren value: " + valueToChange, upgradeTextPos, Color.PapayaWhip);
             attachedObj.AddComponenet(upgradeText);
         }
@@ -104,7 +101,7 @@ namespace BoBo2D
                     upgradeLog = "Upgrade your arttibutes";
                     attachedObj.Disable();
                     levels.levelChanged = true;
-                    foreach (Spawner s in spawners)
+                    foreach (Spawner s in levels.SpawnersList.ToArray())
                     {
                         s.ActivateSpawn = true;
                     }
@@ -112,6 +109,11 @@ namespace BoBo2D
 
                 PrevState = Keyboard.GetState();
             }
+            if (levels.IsLevelCompleted)
+            {
+                attachedObj.Enable();
+            }
+            else attachedObj.Disable();
         }
     }
 }

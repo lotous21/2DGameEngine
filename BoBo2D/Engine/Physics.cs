@@ -9,7 +9,6 @@ namespace BoBo2D
 {
     static class Physics
     {
-        private static float Gravity;
 
     public static bool AABB(Rectangle boxA, Rectangle boxB)
     {

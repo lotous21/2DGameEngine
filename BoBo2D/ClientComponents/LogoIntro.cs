@@ -11,13 +11,14 @@ namespace BoBo2D
     {
         Video intro;
         VideoPlayer video = new VideoPlayer();
+        Scenes scene;
+        Scenes nextScenes;
 
-        public bool ExitScene;
-
-        public LogoIntro (Video introVid)
+        public LogoIntro (Video introVid, Scenes _scene, Scenes _nextScene)
         {
             this.intro = introVid;
-            ExitScene = false;
+            this.scene = _scene;
+            this.nextScenes = _nextScene;
             video.Play(intro);
         }
 
@@ -25,7 +26,8 @@ namespace BoBo2D
         {
             if (video.State == MediaState.Stopped)
             {
-                ExitScene = true;
+                scene.DeactivateScene();
+                nextScenes.ActivateScene();
             }
 
             base.Update(elapsed); 

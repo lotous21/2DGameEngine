@@ -21,7 +21,7 @@ namespace BoBo2D
         public bool IsLevelCompleted { get; set; }
         public bool levelChanged { get; set; }
 
-        public List<Spawner> spawners;
+        public List<Spawner> SpawnersList;
 
         public Levels(int _levelTime, int _decreaseSpawnTime, int _inccreaseLevelTime, int _upgradeToProceed, int _increaseUpgradeToProcceed,Scenes attachedScene, StaticBackground stBack1, StaticBackground stBack2)
         {
@@ -46,7 +46,7 @@ namespace BoBo2D
                 IsLevelCompleted = true;
                 stBack1.Transform.Velocity.X -= 20;
                 stBack2.Transform.Velocity.X -= 20;
-                foreach (Spawner s in spawners)
+                foreach (Spawner s in SpawnersList.ToArray())
                 {
                     s.ActivateSpawn = false;
                 }
