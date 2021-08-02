@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using System.Timers;
 using System;
 using System.Collections.Generic;
@@ -13,17 +14,25 @@ namespace BoBo2D
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
         public const int GAME_HEIGHT = 720;
         public const int GAME_WIDTH = 1280;
 
         int score;
+        bool playBackground;
 
+        string upgradeLog;
+
+        GameObjects introObject;
         GameObjects splashScreenObject;
         GameObjects mainMenuObject;
         GameObjects playerObject;
         GameObjects uiObject;
         GameObjects backgroundsObject;
         GameObjects GameManagerObj;
+        GameObjects upgradeUiObj;
+        GameObjects spawnerObj;
+        GameObjects weaponsObj;
 
         SplashScreen splashScreen;
         Button playButton;
@@ -34,35 +43,47 @@ namespace BoBo2D
 
         SpriteFont basicFont;
         SpaceShip player;
-        Weapon Missiles;
-        Weapon Bor;
-        Levels level1;
+        Weapon missiles;
+        Weapon bor;
+        Levels levels;
         Spawner meteor;
         Spawner reloads;
         Spawner shields;
         Spawner enemy;
 
-        KeyboardState PrevState;
         List<Weapon> weapons = new List<Weapon>();
         List<Projectile> bullets = new List<Projectile>();
         List<Projectile> enemyBullet = new List<Projectile>();
         List<SpawnerObject> spawnList = new List<SpawnerObject>();
+        List<Spawner> spawners = new List<Spawner>();
 
-        Text LevelText;
-        Text BulletCountText;
+        Text levelText;
+        Text bulletCountText;
         Text playerHealthText;
         Text playerShieldText;
         Text playerScoreText;
         Text selectedWeaponText;
 
-        Scenes OpeningScene;
-        Scenes GameScene;
-        Scenes FinalScene;
+        Text logUpgradeText;
 
-        List<Scenes> AllScenes;
+        Upgrade speedUpgrade;
+        Upgrade hpRegenUpgrade;
+        Upgrade maxBulletUpgarde;
 
-        SoundEffect HitSound;
-        SoundEffect ReloadSound;
+        Scenes logoScene;
+        Scenes openingScene;
+        Scenes gameScene;
+
+        List<Scenes> allScenes;
+
+        SoundEffect hitSound;
+        SoundEffect reloadSound;
+
+        Song backgroundMusic;
+
+        Video intro;
+        LogoIntro logoIntro;
+        
 
         public Bobo2D()
         {
@@ -72,66 +93,95 @@ namespace BoBo2D
             _graphics.PreferredBackBufferHeight = GAME_HEIGHT;
             IsMouseVisible = true;
         }
+
         protected override void Initialize()
         {
-            AllScenes = new List<Scenes>();
-            OpeningScene = new Scenes();
-            OpeningScene.ActivateScene();
-            GameScene = new Scenes();
-            AllScenes.Add(OpeningScene);
-            AllScenes.Add(GameScene);
+            allScenes = new List<Scenes>();
+            logoScene = new Scenes();
+            logoScene.ActivateScene();
+            openingScene = new Scenes();
+            gameScene = new Scenes();
+            allScenes.Add(logoScene);
+            allScenes.Add(openingScene);
+            allScenes.Add(gameScene);
             base.Initialize();
         }
+
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             basicFont = Content.Load<SpriteFont>("Font");
-            splashScreen = new SplashScreen(new Vector2(0, 0), Content.Load<Texture2D>("SkyIsYours"), Color.White, 3f, 3f, 1000);
+            intro = Content.Load<Video>("intro2");
+
+            logoIntro = new LogoIntro(intro);
+            splashScreen = new SplashScreen(new Vector2(0, 0), Content.Load<Texture2D>("SkyIsYours2"), Color.White, 3f, 3f, 6000);
+
             Text playLabel = new Text(basicFont, "Play!", new Vector2(0, 0), Color.White);
             Background mainMenu = new Background(new Vector2(0, 0), new Rectangle(1280, 720, 0, 0), Content.Load<Texture2D>("Sky"), Color.White);
+
             playButton = new Button(new Rectangle(0, 0, 380, 160), playLabel, Content.Load<Texture2D>("Button2"), Color.White);
             playButton.Invoke();
 
             Projectile MissileBullet = new Projectile(new Vector2(-50, -50), Content.Load<Texture2D>("Missile"), new Vector2(500, 0), Color.White);
             MissileBullet.Disable();
-            SoundEffect MissileShot = Content.Load<SoundEffect>("ShotSound");
-            HitSound = Content.Load<SoundEffect>("hit");
-            ReloadSound = Content.Load<SoundEffect>("reload");
 
-            Missiles = new Weapon("Missiles", MissileBullet, Keys.D1, MissileShot);
-            Bor = new Weapon("Bor", MissileBullet, Keys.D2, MissileShot);
-            Missiles.Disable();
-            Bor.Disable();
-            Missiles.IsSelected = true;
-            Bor.IsSelected = false;
-            weapons.Add(Missiles);
-            weapons.Add(Bor);
+            SoundEffect MissileShot = Content.Load<SoundEffect>("ShotSound");
+
+            hitSound = Content.Load<SoundEffect>("hit");
+            reloadSound = Content.Load<SoundEffect>("reload");
+            backgroundMusic = Content.Load<Song>("Master");
+
+            missiles = new Weapon("Missiles", MissileBullet, Keys.D1, MissileShot, weapons);
+            bor = new Weapon("Bor", MissileBullet, Keys.D2, MissileShot, weapons);
+
+            missiles.Disable();
+            bor.Disable();
+
+            missiles.IsSelected = true;
+            bor.IsSelected = false;
+
+            weapons.Add(missiles);
+            weapons.Add(bor);
+
             bullets.Add(MissileBullet);
 
             selectedWeaponText = new Text(basicFont, "Selected Weapon: " + GetWeaponSelected().WeaponName, new Vector2(10, 10), Color.Green);
-            Text WeaponText1 = new Text(basicFont, Missiles.WeaponName + " / Input: " + Missiles.KeyboardInput, new Vector2(1140, 10), Color.Orange);
-            Text WeaponText2 = new Text(basicFont, Bor.WeaponName + " / Input: " + Bor.KeyboardInput, new Vector2(1140, 30), Color.Orange);
 
             staticBackground1 = new StaticBackground(new Vector2(0, 0), new Vector2(-50, 0), Content.Load<Texture2D>("City2d"), Color.White);
             staticBackground2 = new StaticBackground(new Vector2(1281, 0), new Vector2(-50, 0), Content.Load<Texture2D>("City2dRef"), Color.White);
 
-            level1 = new Levels(10000, 100, 500, 1, 1, GameScene);
+            levels = new Levels(20000, 300, 5000, 1, 1, gameScene, staticBackground1, staticBackground2);
 
-            meteor = new Spawner(level1, spawnList, Content.Load<Texture2D>("Meteor"), 50, Color.White, 2000, false, true, false, false);
-            reloads = new Spawner(level1, spawnList, Content.Load<Texture2D>("Poweup"), 50, Color.White, 7150, false, false, true, false);
-            shields = new Spawner(level1, spawnList, Content.Load<Texture2D>("Shield"), 50, Color.White, 11750, false, false, false, true);
-            enemy = new Spawner(level1, spawnList, Content.Load<Texture2D>("Plane3"), 50, Color.White, 8660, true, true, false, false);
+            meteor = new Spawner(levels, spawnList, Content.Load<Texture2D>("Meteor"), 50, Color.White, 2000, false, false, true, false, false);
+            reloads = new Spawner(levels, spawnList, Content.Load<Texture2D>("Poweup"), 50, Color.White, 7100, true, false, false, true, false);
+            shields = new Spawner(levels, spawnList, Content.Load<Texture2D>("Shield"), 50, Color.White, 11700, true, false, false, false, true);
+            enemy = new Spawner(levels, spawnList, Content.Load<Texture2D>("Plane3"), 50, Color.White, 8200, false, true, true, false, false);
+            spawners.Add(meteor);
+            spawners.Add(reloads);
+            spawners.Add(shields);
+            spawners.Add(enemy);
 
-            player = new SpaceShip(new Vector2(200, 400), Content.Load<Texture2D>("Plane2"), Color.White, level1);
+            levels.spawners = spawners;
 
-            BulletCountText = new Text(basicFont, "Bullets: " + player.BulletCount, new Vector2(10, 30), Color.White);
+            player = new SpaceShip(new Vector2(200, 400), 200, Content.Load<Texture2D>("Plane2"), Color.White, levels);
+
+            bulletCountText = new Text(basicFont, "Bullets: " + player.BulletCount, new Vector2(10, 30), Color.White);
             playerHealthText = new Text(basicFont, "HP: " + player.HP, new Vector2(10, 600), Color.Red);
             playerShieldText = new Text(basicFont, "Shield: " + player.Shield, new Vector2(10, 620), Color.Red);
             playerScoreText = new Text(basicFont, "Score: " + score, new Vector2(10, 640), Color.White);
-            LevelText = new Text(basicFont, "Level: " + level1.Level.ToString(), new Vector2(600, 10), Color.Red);
+            levelText = new Text(basicFont, "Level: " + levels.Level.ToString(), new Vector2(600, 10), Color.Red);
 
-            GameControls = new Input(Keys.Up, Keys.Down, Keys.Right, Keys.Left, Keys.Space, player);
+            Text ConfirmText = new Text(basicFont, "Press 'Enter' to Continue", new Vector2(300, 360), Color.White);
+            logUpgradeText = new Text(basicFont, "Log: " + upgradeLog, new Vector2(300, 420), Color.Orange);
+
+            GameControls = new Input(Keys.Space, player, weapons, bullets);
+            GameControls.Arrows();
+
+            playBackground = true;
+
+            introObject = new GameObjects();
+            introObject.AddComponenet(logoIntro);
 
             splashScreenObject = new GameObjects();
             splashScreenObject.AddComponenet(splashScreen);
@@ -143,15 +193,13 @@ namespace BoBo2D
 
             playerObject = new GameObjects();
             playerObject.AddComponenet(player);
-            playerObject.AddComponenet(Missiles);
+            playerObject.AddComponenet(missiles);
             playerObject.AddComponenet(MissileBullet);
 
             uiObject = new GameObjects();
             uiObject.AddComponenet(selectedWeaponText);
-            uiObject.AddComponenet(LevelText);
-            uiObject.AddComponenet(WeaponText1);
-            uiObject.AddComponenet(WeaponText2);
-            uiObject.AddComponenet(BulletCountText);
+            uiObject.AddComponenet(levelText);
+            uiObject.AddComponenet(bulletCountText);
             uiObject.AddComponenet(playerHealthText);
             uiObject.AddComponenet(playerShieldText);
             uiObject.AddComponenet(playerScoreText);
@@ -161,24 +209,74 @@ namespace BoBo2D
             backgroundsObject.AddComponenet(staticBackground2);
 
             GameManagerObj = new GameObjects();
+            GameManagerObj.AddComponenet(GameControls);
 
-            OpeningScene.AddGameObject(mainMenuObject);
-            OpeningScene.AddGameObject(splashScreenObject);
-            GameScene.AddGameObject(GameManagerObj);
-            GameScene.AddGameObject(backgroundsObject);
-            GameScene.AddGameObject(playerObject);
-            GameScene.AddGameObject(uiObject);
+            weaponsObj = new GameObjects();
+            weaponsObj.AddComponenet(missiles);
+            weaponsObj.AddComponenet(bor);
+
+            upgradeUiObj = new GameObjects();
+            upgradeUiObj.AddComponenet(logUpgradeText);
+            upgradeUiObj.AddComponenet(ConfirmText);
+
+            speedUpgrade = new Upgrade("Moving Speed", 100, true, Keys.Z, 100, upgradeUiObj, logUpgradeText, basicFont, levels, new Vector2 (300,300), 1000, spawners);
+            hpRegenUpgrade = new Upgrade("HP Regeneration", 200, false, Keys.X, 150, upgradeUiObj, logUpgradeText, basicFont, levels, new Vector2(300, 320), 100, spawners);
+            maxBulletUpgarde = new Upgrade("Max Bullets", 1, true, Keys.C, 200, upgradeUiObj, logUpgradeText, basicFont, levels, new Vector2(300, 340), 15, spawners);
+
+            spawnerObj = new GameObjects();
+            spawnerObj.AddComponenet(meteor);
+            spawnerObj.AddComponenet(reloads);
+            spawnerObj.AddComponenet(shields);
+            spawnerObj.AddComponenet(enemy);
+            spawnerObj.AddComponenet(levels);
+
+            logoScene.AddGameObject(introObject);
+
+            openingScene.AddGameObject(mainMenuObject);
+            openingScene.AddGameObject(splashScreenObject);
+
+            gameScene.AddGameObject(GameManagerObj);
+            gameScene.AddGameObject(backgroundsObject);
+            gameScene.AddGameObject(playerObject);
+            gameScene.AddGameObject(uiObject);
+            gameScene.AddGameObject(spawnerObj);
+            gameScene.AddGameObject(upgradeUiObj);
+            gameScene.AddGameObject(weaponsObj);
         }
-        protected override void Update(GameTime gameTime)
+
+        protected override void Update (GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            if (!OpeningScene.IsSceneActive())
+
+            if (logoIntro.ExitScene)
             {
-                GameScene.ActivateScene();
+                logoScene.DeactivateScene();
+                openingScene.ActivateScene();
             }
+
+            if (playButton.IsClick())
+            {
+                openingScene.DeactivateScene();
+            }
+
+            if (!openingScene.IsSceneActive() && !logoScene.IsSceneActive())
+            {
+                gameScene.ActivateScene();
+            }
+            if (gameScene.IsSceneActive() && playBackground)
+            {
+                MediaPlayer.Play(backgroundMusic);
+                playBackground = false;
+            }
+
+            if (levels.IsLevelCompleted)
+            {
+                upgradeUiObj.Enable();
+            }
+            else upgradeUiObj.Disable();
 
             foreach (SpawnerObject s in spawnList.ToArray())
             {
@@ -194,73 +292,48 @@ namespace BoBo2D
             {
                 p.Update(elapsed);
             }
+            foreach (Projectile h in enemyBullet.ToArray())
+            {
+                h.Update(elapsed);
+            }
+            foreach (Scenes s in allScenes.ToArray())
+            {
+                s.UpdateAllObjects(elapsed);
+            }
 
-            meteor.Update(elapsed);
-            reloads.Update(elapsed);
-            shields.Update(elapsed);
-            enemy.Update(elapsed);
-
-            staticBackground1.Update(elapsed);
-            staticBackground2.Update(elapsed);
-
-            player.Update(elapsed);
+            speedUpgrade.FixedUpdate(ref player.MovingSpeed, ref score, ref upgradeLog);
+            hpRegenUpgrade.FixedUpdate(ref player.HpRegenSpeed, ref score, ref upgradeLog);
+            maxBulletUpgarde.FixedUpdate(ref player.MaxBullet, ref score, ref upgradeLog);
 
             if (score < 0)
             {
                 score = 0;
             }
 
-            KeyHandler();
-            UpdatedEntitied(elapsed);
-            CheckCollisions();
-
-            base.Update(gameTime);
-        }
-        void UpdatedEntitied(float elapsed)
-        {
-            splashScreen.Update();
-
             player.Transform.Velocity = new Vector2(0, 0);
-
-            playButton.Update();
 
             foreach (SpawnerObject s in spawnList.ToArray())
             {
                 s.Update(elapsed);
+
+                if (s.IsFire)
+                {
+                    s.BulletImage = Content.Load<Texture2D>("Missile");
+                    s.projectiles = enemyBullet;
+                }
             }
-            foreach (Projectile p in bullets.ToArray())
-            {
-                p.Update(elapsed);
-            }
-            foreach (Projectile h in enemyBullet.ToArray())
-            {
-                h.Update(elapsed);
-            }
+
+            CheckCollisions();
 
             BlankGame();
 
-            if (playButton.IsClick())
-            {
-                OpeningScene.DeactivateScene();
-            }
-
-            selectedWeaponText.label = "Selected Weapon: " + GetWeaponSelected().WeaponName;
-            selectedWeaponText.Update();
-
-            LevelText.label = "Level: " + level1.Level.ToString();
-            LevelText.Update();
-
-            BulletCountText.label = "Bullets: " + player.BulletCount;
-            BulletCountText.Update();
-
-            playerHealthText.label = "HP: " + player.HP;
-            playerHealthText.Update();
-
-            playerShieldText.label = "Shield: " + player.Shield;
-            playerShieldText.Update();
-
-            playerScoreText.label = "Score: " + score;
-            playerScoreText.Update();
+            selectedWeaponText.Label = "Selected Weapon: " + GetWeaponSelected().WeaponName;
+            levelText.Label = "Level: " + levels.Level;
+            bulletCountText.Label = "Bullets: " + player.BulletCount;
+            playerHealthText.Label = "HP: " + player.HP;
+            playerShieldText.Label = "Shield: " + player.Shield;
+            playerScoreText.Label = "Score: " + score;
+            logUpgradeText.Label = "Log: " + upgradeLog;
 
             if (player.HP >= 0 && player.HP <= 30)
             {
@@ -288,16 +361,16 @@ namespace BoBo2D
                 playerShieldText.ImageColor = Color.Green;
             }
 
-            level1.Update();
-            GameControls.Update();
+            base.Update(gameTime);
         }
-        protected override void Draw(GameTime gameTime)
+
+        protected override void Draw (GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
 
             _spriteBatch.Begin();
 
-            foreach(var scenes in AllScenes.ToArray())
+            foreach(var scenes in allScenes.ToArray())
             {
                 scenes.DrawAllObjects(_spriteBatch);
             }
@@ -305,7 +378,7 @@ namespace BoBo2D
             {
                 bullet.Draw(_spriteBatch);
             }
-            foreach(var spawn in spawnList.ToArray())
+            foreach (var spawn in spawnList.ToArray())
             {
                 spawn.Draw(_spriteBatch);
             }
@@ -318,38 +391,7 @@ namespace BoBo2D
 
             base.Draw(gameTime);
         }
-        void KeyHandler()
-        {
-            if (Keyboard.GetState().IsKeyDown(Missiles.KeyboardInput) && PrevState.IsKeyUp(Missiles.KeyboardInput))
-            {
-                foreach (Weapon w in weapons)
-                {
-                    w.IsSelected = false;
-                }
 
-                Missiles.IsSelected = true;
-            }
-            if (Keyboard.GetState().IsKeyDown(Bor.KeyboardInput) && PrevState.IsKeyUp(Bor.KeyboardInput))
-            {
-                foreach (Weapon w in weapons)
-                {
-                    w.IsSelected = false;
-                }
-
-                Bor.IsSelected = true;
-            }
-            if (Keyboard.GetState().IsKeyDown(GameControls.FireKey) && PrevState.IsKeyUp(GameControls.FireKey) && player.BulletCount > 0)
-            {
-                Projectile p = new Projectile(GetWeaponSelected().Bullet.Transform.Position, GetWeaponSelected().Bullet.Image, GetWeaponSelected().Bullet.Transform.Velocity, Color.White);
-                bullets.Add(p);
-                p.Enable();
-                p.Transform.Position = new Vector2(player.Transform.Position.X, player.Transform.Position.Y + 15);
-                GetWeaponSelected().ShotSound.Play();
-                player.BulletCount--;
-            }
-
-            PrevState = Keyboard.GetState();
-        }
         Weapon GetWeaponSelected()
         {
             foreach (Weapon w in weapons)
@@ -363,147 +405,150 @@ namespace BoBo2D
         }
         void BlankGame()
         {
-            if (AllScenes.Count == 0)
+            if (allScenes.Count == 0)
             {
                 Text t = new Text(basicFont, "Please Add Scene to the game", new Vector2(510, 300), Color.Red);
                 GameObjects g = new GameObjects();
                 Scenes s = new Scenes();
                 s.ActivateScene();
-                AllScenes.Add(s);
+                allScenes.Add(s);
                 s.AddGameObject(g);
                 g.AddComponenet(t);
             }
         }
         void CheckCollisions()
         {
-            foreach (var b in bullets.ToArray())
+            if (!spawners[0].ActivateSpawn)
             {
+                foreach (var b in bullets.ToArray())
+                {
+                    foreach (var s in spawnList.ToArray())
+                    {
+                        if (b.Bounds.Intersects(s.Bounds))
+                        {
+                            if (s.IsFire)
+                            {
+                                score += 50;
+                                bullets.Remove(b);
+                                spawnList.Remove(s);
+                                s.Disable();
+                                b.Disable();
+                            }
+                            if (s.IsDamage)
+                            {
+                                score += 10;
+                                bullets.Remove(b);
+                                spawnList.Remove(s);
+                                s.Disable();
+                                b.Disable();
+                            }
+                            if (s.IsReload)
+                            {
+                                score -= 20;
+                                bullets.Remove(b);
+                                spawnList.Remove(s);
+                                s.Disable();
+                                b.Disable();
+                            }
+                            if (s.IsShield)
+                            {
+                                score -= 20;
+                                bullets.Remove(b);
+                                spawnList.Remove(s);
+                                s.Disable();
+                                b.Disable();
+                            }
+                        }
+                    }
+                }
+
                 foreach (var s in spawnList.ToArray())
                 {
-                    if (b.Bounds.Intersects(s.Bounds))
+                    if (player.Bounds.Intersects(s.Bounds))
                     {
-                        if (s.IsFire)
-                        {
-                            score += 50;
-                            bullets.Remove(b);
-                            spawnList.Remove(s);
-                            s.Disable();
-                            b.Disable();
-                        }
                         if (s.IsDamage)
                         {
-                            score += 10;
-                            bullets.Remove(b);
+                            hitSound.Play();
+                            if (player.Shield <= 0)
+                            {
+                                player.HP -= 20;
+                            }
+                            else if (player.Shield > 0)
+                            {
+                                player.Shield -= 20;
+                            }
+                            else
+                            {
+                                player.HP -= 20;
+                            }
                             spawnList.Remove(s);
                             s.Disable();
-                            b.Disable();
                         }
                         if (s.IsReload)
                         {
-                            score -= 20;
-                            bullets.Remove(b);
+                            reloadSound.Play();
+                            player.BulletCount = player.MaxBullet;
                             spawnList.Remove(s);
-                            s.Disable();
-                            b.Disable();
+
                         }
                         if (s.IsShield)
                         {
-                            score -= 20;
-                            bullets.Remove(b);
+                            player.ShieldDestroyed = false;
+                            player.Shield = 100;
                             spawnList.Remove(s);
-                            s.Disable();
-                            b.Disable();
                         }
                     }
                 }
-            }
 
-            foreach (var s in spawnList.ToArray())
-            {
-                if (player.Bounds.Intersects(s.Bounds))
+                foreach (var h in enemyBullet.ToArray())
                 {
-                    if (s.IsDamage)
+                    if (player.Bounds.Intersects(h.Bounds))
                     {
-                        HitSound.Play();
+                        hitSound.Play();
                         if (player.Shield <= 0)
                         {
-                            player.HP -= 20;
+                            player.HP -= 50;
                         }
                         else if (player.Shield > 0)
                         {
-                            player.Shield -= 20;
+                            player.Shield -= 50;
                         }
                         else
                         {
-                            player.HP -= 20;
+                            player.HP -= 50;
                         }
-                        spawnList.Remove(s);
-                        s.Disable();
-                    }
-                    if (s.IsReload)
-                    {
-                        ReloadSound.Play();
-                        player.BulletCount += 5;
-                        spawnList.Remove(s);
-
-                    }
-                    if (s.IsShield)
-                    {
-                        player.ShieldDestroyed = false;
-                        player.Shield = 100;
-                        spawnList.Remove(s);
-                    }
-                }
-            }
-
-            foreach (var h in enemyBullet.ToArray())
-            {
-                if (player.Bounds.Intersects(h.Bounds))
-                {
-                    HitSound.Play();
-                    if (player.Shield <= 0)
-                    {
-                        player.HP -= 50;
-                    }
-                    else if (player.Shield > 0)
-                    {
-                        player.Shield -= 50;
-                    }
-                    else
-                    {
-                        player.HP -= 50;
-                    }
-                    enemyBullet.Remove(h);
-                }
-            }
-
-            foreach (var h in enemyBullet.ToArray())
-            {
-                foreach (var c in bullets.ToArray())
-                {
-                    if (h.Bounds.Intersects(c.Bounds))
-                    {
-                        bullets.Remove(c);
-                        c.Disable();
                         enemyBullet.Remove(h);
-                        h.Disable();
+                    }
+                }
+
+                foreach (var h in enemyBullet.ToArray())
+                {
+                    foreach (var c in bullets.ToArray())
+                    {
+                        if (h.Bounds.Intersects(c.Bounds))
+                        {
+                            bullets.Remove(c);
+                            c.Disable();
+                            enemyBullet.Remove(h);
+                            h.Disable();
+                        }
                     }
                 }
             }
 
             if (player.HP <= 0)
             {
-                AllScenes.Clear();
+                allScenes.Clear();
                 bullets.Clear();
                 spawnList.Clear();
                 enemyBullet.Clear();
                 player.Disable(); 
                 Text t = new Text(basicFont, "Game Over", new Vector2(550, 300), Color.Red);
-                Text t2 = new Text(basicFont, "Score: " + score , new Vector2(550, 320), Color.White);
+                Text t2 = new Text(basicFont, "Score: " + score, new Vector2(550, 320), Color.White);
                 GameObjects g = new GameObjects();
                 Scenes s = new Scenes();
                 s.ActivateScene();
-                AllScenes.Add(s);
+                allScenes.Add(s);
                 s.AddGameObject(g);
                 g.AddComponenet(t);
                 g.AddComponenet(t2);

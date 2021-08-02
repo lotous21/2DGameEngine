@@ -27,7 +27,7 @@ namespace BoBo2D
             Alpha = 1f;
         }
 
-        public void Draw(SpriteBatch sb)
+        public virtual void Draw (SpriteBatch sb)
         {
             if (this.Drawable && this.enabled && !IsText)
             {
@@ -59,5 +59,11 @@ namespace BoBo2D
         {
             enabled = false;
         }
+
+        public virtual void Update(float elapsed)
+        {
+
+        }
+
     }
 }

@@ -12,20 +12,40 @@ namespace BoBo2D
     {
         public string WeaponName;
         public Projectile Bullet;
-        public int TotalBullets;
-        public int Damage;
         public bool IsSelected;
-        public Keys KeyboardInput;
+        Keys keyboardInput;
         public SoundEffect ShotSound;
+        List<Weapon> weapons;
 
-        public Weapon(string Name, Projectile bullet, Keys keyboardInput, SoundEffect shot)
+        KeyboardState PrevState;
+
+
+        public Weapon(string Name, Projectile bullet, Keys _keyboardInput, SoundEffect shot, List<Weapon> _weapons)
         {
             WeaponName = Name;
             Bounds = new Rectangle(0, 0, 45, 10);
             Bullet = bullet;
-            KeyboardInput = keyboardInput;
+            keyboardInput = _keyboardInput;
             ShotSound = shot;
+            weapons = _weapons;
             this.Drawable = false;
+        }
+
+        public override void Update(float elapsed)
+        {
+            if (Keyboard.GetState().IsKeyDown(keyboardInput) && PrevState.IsKeyUp(keyboardInput))
+            {
+                foreach (Weapon w in weapons)
+                {
+                    w.IsSelected = false;
+                }
+
+                this.IsSelected = true;
+            }
+
+            PrevState = Keyboard.GetState();
+
+            base.Update(elapsed);
         }
 
     }

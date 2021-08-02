@@ -9,6 +9,7 @@ namespace BoBo2D
 {
     class SplashScreen : Componenet
     {
+        Timer timer;
         float fadeIn;
         float fadeOut;
 
@@ -29,15 +30,20 @@ namespace BoBo2D
             this.initialFadeOut = FadeOut;
             this.Alpha = 1;
             this.Drawable = true;
-            Timer timer = new Timer(totalTime);
+            timer = new Timer(totalTime);
             timer.Elapsed += delegate { this.Disable(); timer.Enabled = false; };
-            timer.Enabled = true;
+            
         }
 
-        public void Update()
+        public override void Update(float elapsed)
         {
             if (this.fadeIn > 0) { this.Alpha += 1f / this.initialFadeIn; this.fadeIn--; }
             else if (this.fadeOut > 0) { this.Alpha -= 1 / this.initialFadeOut; this.fadeOut--; this.ImageColor *= this.Alpha; }
+
+            if (this.IsEnable())
+            {
+                timer.Enabled = true;
+            }
         }
 
     }

@@ -9,15 +9,17 @@ namespace BoBo2D
 {
     class SpaceShip : Componenet
     {
-        public int BulletCount;
-        public int HP;
-        public int Shield;
+        public int BulletCount { get; set; }
+        public int HP { get; set; }
+        public int Shield { get; set; }
         public int MaxBullet;
+        public int MovingSpeed;
+
         Timer hpRegen;
-        Timer shieldRegen;
         Timer totalTimer;
         Levels level;
-        public int HpRegenSpeed { get; set; }
+
+        public int HpRegenSpeed;
         public int ShieldRegenSpeed { get; set; }
 
         int totalTimerSpeed;
@@ -26,9 +28,10 @@ namespace BoBo2D
         public bool ShieldDestroyed { get; set; }
 
 
-        public SpaceShip(Vector2 location, Texture2D image, Color color, Levels _level)
+        public SpaceShip(Vector2 location, int velocity, Texture2D image, Color color, Levels _level)
         {
             this.Transform.Position = location;
+            this.MovingSpeed = velocity;
             this.level = _level;
             this.Image = image;
             this.ImageColor = color;
@@ -53,7 +56,7 @@ namespace BoBo2D
             };
         }
 
-        public void Update(float elapsed)
+        public override void Update(float elapsed)
         {
             this.Transform.Position += this.Transform.Velocity * elapsed;
             this.Bounds.X = (int)Transform.Position.X;

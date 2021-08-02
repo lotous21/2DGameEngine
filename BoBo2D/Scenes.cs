@@ -68,6 +68,19 @@ namespace BoBo2D
                 }
             }
         }
+        public void UpdateAllObjects(float elapsed)
+        {
+            if (isActive)
+            {
+                for (int i = 0; i < GameObjects.Count; i++)
+                {
+                    for (int j = 0; j < GameObjects[i].GetComponentList().Count; j++)
+                    {
+                        GameObjects[i].GetComponenet(j).Update(elapsed);
+                    }
+                }
+            }
+        }
         public void LoadScene(Scenes s)
         {
             s.ActivateScene();

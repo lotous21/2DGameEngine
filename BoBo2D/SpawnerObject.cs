@@ -47,7 +47,7 @@ namespace BoBo2D
                 fireTimer.Enabled = true;
             }
         }
-        public void Update(float elapsed)
+        public override void Update(float elapsed)
         {
             this.Transform.Position += this.Transform.Velocity * elapsed;
             this.Bounds.X = (int)this.Transform.Position.X;

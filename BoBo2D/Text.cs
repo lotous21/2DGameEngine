@@ -10,12 +10,13 @@ namespace BoBo2D
     class Text : Componenet
     {
 
-        public string label { get; set; }
+        public string Label { get; set; }
 
         public Text(SpriteFont font, string textlabel, Vector2 Location, Color color)
         {
             this.IsText = true;
             this.TextLabel = textlabel;
+            Label = this.TextLabel;
             this.TextFont = font;
             this.ImageColor = color;
             this.Transform.Position = Location;
@@ -23,9 +24,9 @@ namespace BoBo2D
             this.Enable();
         }
 
-        public void Update()
+        public override void Update(float elapsed)
         {
-            this.TextLabel = label;
+            this.TextLabel = Label;
         }
     }
 }

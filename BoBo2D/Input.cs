@@ -1,11 +1,12 @@
-﻿using Microsoft.Xna.Framework.Input;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BoBo2D
 {
-    class Input
+    class Input: Componenet
     {
         public Keys UpKey;
         public Keys DownKey;
@@ -15,8 +16,15 @@ namespace BoBo2D
 
         SpaceShip player;
 
-        public Input (Keys up, Keys down, Keys right, Keys left, Keys fire, SpaceShip _player)
+        List<Weapon> weapons;
+        List<Projectile> bullets;
+
+        KeyboardState PrevState;
+
+        public Input(Keys up, Keys down, Keys right, Keys left, Keys fire, SpaceShip _player, List<Weapon> _weapons, List<Projectile> _bullets)
         {
+            this.bullets = _bullets;
+            this.weapons = _weapons;
             this.player = _player;
             this.UpKey = up;
             this.DownKey = down;
@@ -24,28 +32,42 @@ namespace BoBo2D
             this.LeftKey = left;
             this.FireKey = fire;
         }
-        public Input()
+        public Input(Keys fire, SpaceShip _player, List<Weapon> _weapons, List<Projectile> _bullets)
         {
-
+            this.bullets = _bullets;
+            this.weapons = _weapons;
+            this.FireKey = fire;
+            this.player = _player;
         }
-        public void Update()
+        public override void Update(float elapsed)
         {
             if (Keyboard.GetState().IsKeyDown(DownKey))
             {
-                player.Transform.Velocity.Y = 500;
+                player.Transform.Velocity.Y = player.MovingSpeed;
             }
             if (Keyboard.GetState().IsKeyDown(UpKey))
             {
-                player.Transform.Velocity.Y = -500;
+                player.Transform.Velocity.Y = -player.MovingSpeed;
             }
             if (Keyboard.GetState().IsKeyDown(RighyKey))
             {
-                player.Transform.Velocity.X = 500;
+                player.Transform.Velocity.X = player.MovingSpeed;
             }
             if (Keyboard.GetState().IsKeyDown(LeftKey))
             {
-                player.Transform.Velocity.X = -500;
+                player.Transform.Velocity.X = -player.MovingSpeed;
             }
+            if (Keyboard.GetState().IsKeyDown(FireKey) && PrevState.IsKeyUp(FireKey) && player.BulletCount > 0)
+            {
+                Projectile p = new Projectile(GetWeaponSelected().Bullet.Transform.Position, GetWeaponSelected().Bullet.Image, GetWeaponSelected().Bullet.Transform.Velocity, Color.White);
+                bullets.Add(p);
+                p.Enable();
+                p.Transform.Position = new Vector2(player.Transform.Position.X, player.Transform.Position.Y + 15);
+                GetWeaponSelected().ShotSound.Play();
+                player.BulletCount--;
+            }
+
+            PrevState = Keyboard.GetState();
         }
         public void WASD()
         {
@@ -60,6 +82,18 @@ namespace BoBo2D
             DownKey = Keys.Down;
             RighyKey = Keys.Right;
             LeftKey = Keys.Left;
+        }
+
+        Weapon GetWeaponSelected()
+        {
+            foreach (Weapon w in weapons)
+            {
+                if (w.IsSelected)
+                {
+                    return w;
+                }
+            }
+            return null;
         }
     }
 }

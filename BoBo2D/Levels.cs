@@ -19,9 +19,13 @@ namespace BoBo2D
         public int IncreaseLevelTime;
         public int IncreaseUpgradeToProceed;
 
+        public bool IsLevelCompleted;
+
         public bool levelChanged { get; set; }
 
-        public Levels(int _levelTime, int _decreaseSpawnTime, int _inccreaseLevelTime, int _upgradeToProceed, int _increaseUpgradeToProcceed,Scenes attachedScene)
+        public List<Spawner> spawners;
+
+        public Levels(int _levelTime, int _decreaseSpawnTime, int _inccreaseLevelTime, int _upgradeToProceed, int _increaseUpgradeToProcceed,Scenes attachedScene, StaticBackground stBack1, StaticBackground stBack2)
         {
             Random rnd = new Random();
             this.DeceaseSpawnTime = _decreaseSpawnTime;
@@ -38,16 +42,24 @@ namespace BoBo2D
             {
                 levelTimer.Enabled = false;
                 Level++;
-                levelChanged = true;
+                levelChanged = false;
                 LevelTime += IncreaseLevelTime;
                 UpgradesToProceed += IncreaseUpgradeToProceed;
+                IsLevelCompleted = true;
+                stBack1.Transform.Velocity.X -= 20;
+                stBack2.Transform.Velocity.X -= 20;
+                foreach (Spawner s in spawners)
+                {
+                    s.ActivateSpawn = false;
+                }
             };
         }
 
-        public void Update()
+        public override void Update(float elapsed)
         {
             if (levelChanged && activeScene.IsSceneActive())
             {
+                IsLevelCompleted = false;
                 levelTimer.Enabled = true;
                 levelTimer.Interval = LevelTime;
                 levelChanged = false;

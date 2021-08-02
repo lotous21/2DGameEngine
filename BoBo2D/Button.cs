@@ -13,6 +13,7 @@ namespace BoBo2D
         MouseState currentMouseState;
         MouseState prevMouseState;
         Rectangle mouseRec;
+
         bool clicked;
         bool hoover;
 
@@ -31,7 +32,7 @@ namespace BoBo2D
         }
         public void Invoke()
         {
-            //mouseRec = new Rectangle(currentMouseState.X, currentMouseState.Y, 1, 1);
+            mouseRec = new Rectangle(currentMouseState.X, currentMouseState.Y, 1, 1);
             clicked = false;
 
         }
@@ -51,7 +52,7 @@ namespace BoBo2D
             }
             return false;
         }
-        public void Update()
+        public override void Update(float elapsed)
         {
             prevMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();

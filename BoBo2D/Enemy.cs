@@ -18,7 +18,7 @@ namespace BoBo2D
             this.Enable();
         }
 
-        public void Update(float elapsed)
+        public override void Update(float elapsed)
         {
             this.Transform.Position += this.Transform.Velocity * elapsed;
             this.Bounds.X = (int)Transform.Position.X;

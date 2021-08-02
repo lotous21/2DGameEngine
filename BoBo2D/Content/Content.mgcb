@@ -206,3 +206,43 @@
 /processorParam:TextureFormat=Color
 /build:Plane3.png
 
+#begin SkyIsYours1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SkyIsYours1.png
+
+#begin intro.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:intro.mp4
+
+#begin intro2.mp4
+/importer:H264Importer
+/processor:VideoProcessor
+/build:intro2.mp4
+
+#begin SkyIsYours2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:SkyIsYours2.png
+
+#begin Master.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:Master.mp3
+

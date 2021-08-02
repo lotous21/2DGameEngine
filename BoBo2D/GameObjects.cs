@@ -50,10 +50,20 @@ namespace BoBo2D
         public void Disable()
         {
             isEnabled = false;
+
+            foreach (Componenet c in Components)
+            {
+                c.Disable();
+            }
         }
         public void Enable()
         {
             isEnabled = true;
+
+            foreach (Componenet c in Components)
+            {
+                c.Enable();
+            }
         }
         public bool IsEnable()
         {
