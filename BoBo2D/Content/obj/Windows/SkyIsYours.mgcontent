@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PipelineBuildEvent xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <SourceFile>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/SkyIsYours.jpg</SourceFile>
-  <SourceTime>2021-07-25T01:11:17.9795724+03:00</SourceTime>
-  <DestFile>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/bin/Windows/SkyIsYours.xnb</DestFile>
-  <DestTime>2021-08-02T02:49:35.8029853+03:00</DestTime>
+  <SourceFile>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/SkyIsYours.jpg</SourceFile>
+  <SourceTime>2021-08-02T03:10:27+03:00</SourceTime>
+  <DestFile>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/bin/Windows/SkyIsYours.xnb</DestFile>
+  <DestTime>2021-08-02T13:07:10.7914188+03:00</DestTime>
   <Importer>TextureImporter</Importer>
   <ImporterTime>2017-03-01T17:05:36+02:00</ImporterTime>
   <Processor>TextureProcessor</Processor>

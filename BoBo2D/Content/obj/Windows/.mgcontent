@@ -4,29 +4,28 @@
   <Platform>Windows</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Button.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Button2.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/City2d.jpg</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/City2dRef.jpg</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/explosion.wav</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Font.spritefont</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/hit.wav</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Meteor.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Missile.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/OpeningSound.mp3</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Plane.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Plane2.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Poweup.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/reload.wav</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/ShotSound.wav</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Sky.jpg</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/SkyIsYours.jpg</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Shield.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Plane3.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/SkyIsYours1.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/intro.mp4</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/intro2.mp4</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/SkyIsYours2.png</File>
-    <File>C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Master.mp3</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Button.png</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Button2.png</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/City2d.jpg</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/City2dRef.jpg</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/explosion.wav</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Font.spritefont</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/hit.wav</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Meteor.png</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Missile.png</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/OpeningSound.mp3</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Plane.png</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Plane2.png</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Poweup.png</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/reload.wav</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/ShotSound.wav</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Sky.jpg</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/SkyIsYours.jpg</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Shield.png</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Plane3.png</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/intro.mp4</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/intro2.mp4</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/SkyIsYours2.png</File>
+    <File>C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Master.mp3</File>
   </SourceFiles>
 </SourceFileCollection>

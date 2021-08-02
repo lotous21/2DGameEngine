@@ -1,4 +1,3 @@
 Source File,Dest File,Processor Type,Content Type,Source File Size,Dest File Size,Build Seconds
-"C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/intro2.mp4","C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/bin/Windows/Content/intro2.xnb","VideoProcessor","VideoContent",29388362,244,0.1975215
-"C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/Master.mp3","C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/bin/Windows/Content/Master.xnb","SongProcessor","SongContent",26503914,124,3.9178126
-"C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/ShotSound.wav","C:/Users/USER/Documents/GitHub/BoBo2D/BoBo2D/Content/bin/Windows/Content/ShotSound.xnb","SoundEffectProcessor","SoundEffectContent",237684,237673,0.5698146
+"C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/Master.mp3","C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/bin/Windows/Content/Master.xnb","SongProcessor","SongContent",26503914,124,4.076411
+"C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/SkyIsYours2.png","C:/Users/USER/Documents/GitHub/OkronGameEngine2D/BoBo2D/Content/bin/Windows/Content/SkyIsYours2.xnb","TextureProcessor","Texture2DContent",1072595,3689365,0.1449557
