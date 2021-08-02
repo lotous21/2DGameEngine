@@ -48,7 +48,7 @@ namespace BoBo2D
             {
                 if (this.IsEnable())
                 {
-                    if (levels.activeScene.IsSceneActive())
+                    if (levels.ActiveScene.IsSceneActive())
                     {
                         int xPos = rnd.Next(50, 650);
                         SpawnerObject s = new SpawnerObject(new Vector2(1280, xPos), image, this.velocity, color, new Rectangle(0, 0, 28, 28), this.IsFire, this.IsDamage, this.IsReload, this.IsShield);
@@ -80,7 +80,7 @@ namespace BoBo2D
             {
                 this.spawnTimer = 100;
             }
-            if (levels.Level == 1 && levels.activeScene.IsSceneActive() && ActivateSpawn)
+            if (levels.Level == 1 && levels.ActiveScene.IsSceneActive() && ActivateSpawn)
             {
                 timer.Interval = spawnTimer;
                 totalTimer.Interval = levels.LevelTime;
@@ -88,7 +88,7 @@ namespace BoBo2D
                 totalTimer.Enabled = true;
                 ActivateSpawn = false;
             }
-            else if (levels.activeScene.IsSceneActive() && ActivateSpawn)
+            else if (levels.ActiveScene.IsSceneActive() && ActivateSpawn)
             {
                 if (spawnTimer <= 100)
                 {
@@ -100,7 +100,7 @@ namespace BoBo2D
                 totalTimer.Enabled = true;
                 ActivateSpawn = false;
             }
-            if (!levels.activeScene.IsSceneActive())
+            if (!levels.ActiveScene.IsSceneActive())
             {
                 timer.Enabled = false;
                 totalTimer.Enabled = false;

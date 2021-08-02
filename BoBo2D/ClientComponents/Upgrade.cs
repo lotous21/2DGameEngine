@@ -10,17 +10,20 @@ namespace BoBo2D
     class Upgrade: Componenet
     {
         string upgradeName;
-        private int valueToChange;
-        private int maxValue;
-        private bool isIncreasing;
-        private Keys upgradeKey;
-        private int costUpgrade;
-        private GameObjects attachedObj;
-        private Text logText;
-        private SpriteFont upgradeTextFont;
+        int valueToChange;
+        int maxValue;
+        int costUpgrade;
+        bool isIncreasing;
+
+        Keys upgradeKey;
         KeyboardState PrevState;
+
+        GameObjects attachedObj;
+        SpriteFont upgradeTextFont;
+        Text logText;
         Text upgradeText;
         Levels levels;
+
         List<Spawner> spawners;
 
         public Upgrade(string name, int changeValue, bool increase, Keys input, int cost, GameObjects attached, Text text, SpriteFont font, Levels _level, Vector2 upgradeTextPos, int max, List<Spawner> _spawners)

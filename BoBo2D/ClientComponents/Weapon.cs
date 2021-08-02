@@ -11,14 +11,14 @@ namespace BoBo2D
     class Weapon : Componenet
     {
         public string WeaponName;
-        public Projectile Bullet;
         public bool IsSelected;
-        Keys keyboardInput;
+
+        public Projectile Bullet;
         public SoundEffect ShotSound;
+
+        Keys keyboardInput;
         List<Weapon> weapons;
-
-        KeyboardState PrevState;
-
+        KeyboardState prevState;
 
         public Weapon(string Name, Projectile bullet, Keys _keyboardInput, SoundEffect shot, List<Weapon> _weapons)
         {
@@ -33,7 +33,7 @@ namespace BoBo2D
 
         public override void Update(float elapsed)
         {
-            if (Keyboard.GetState().IsKeyDown(keyboardInput) && PrevState.IsKeyUp(keyboardInput))
+            if (Keyboard.GetState().IsKeyDown(keyboardInput) && prevState.IsKeyUp(keyboardInput))
             {
                 foreach (Weapon w in weapons)
                 {
@@ -43,7 +43,7 @@ namespace BoBo2D
                 this.IsSelected = true;
             }
 
-            PrevState = Keyboard.GetState();
+            prevState = Keyboard.GetState();
 
             base.Update(elapsed);
         }

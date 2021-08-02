@@ -12,19 +12,15 @@ namespace BoBo2D
     {
         MouseState currentMouseState;
         MouseState prevMouseState;
-        Rectangle mouseRec;
 
         bool clicked;
         bool hoover;
-
-        Text ButtonLabel;
 
         public Button(Rectangle bounds, Text text, Texture2D image, Color color)
         {
             this.Transform.Position = new Vector2(430, 250);
             this.Bounds = bounds;
-            this.ButtonLabel = text;
-            text.Transform.Position = new Vector2(590,320);
+            text.Transform.Position = new Vector2(590, 320);
             this.Image = image;
             this.ImageColor = color;
             this.Enable();

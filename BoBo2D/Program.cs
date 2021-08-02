@@ -12,8 +12,6 @@ namespace BoBo2D
         {
             using (var game = new Bobo2D())
                 game.Run();
-
-
         }
     }
 }

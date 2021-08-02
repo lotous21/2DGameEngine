@@ -24,7 +24,7 @@ namespace BoBo2D
 
         int totalTimerSpeed;
 
-        bool ActivateTimer;
+        bool activateTimer;
         public bool ShieldDestroyed { get; set; }
 
 
@@ -40,7 +40,7 @@ namespace BoBo2D
             this.Drawable = true;
             this.HP = 100;
             this.Shield = 100;
-            this.ActivateTimer = true;
+            this.activateTimer = true;
             this.MaxBullet = 5;
             hpRegen = new Timer();
             totalTimer = new Timer();
@@ -52,7 +52,7 @@ namespace BoBo2D
             };
             totalTimer.Elapsed += delegate
             {
-                ActivateTimer = true;
+                activateTimer = true;
             };
         }
 
@@ -86,22 +86,22 @@ namespace BoBo2D
                 ShieldDestroyed = true;
             }
 
-            if (level.Level == 1 && ActivateTimer)
+            if (level.Level == 1 && activateTimer)
             {
                 hpRegen.Interval = HpRegenSpeed;
                 hpRegen.Enabled = true;
                 totalTimer.Interval = totalTimerSpeed;
                 totalTimer.Enabled = true;
-                ActivateTimer = false;
+                activateTimer = false;
             }
-            else if (level.levelChanged && ActivateTimer)
+            else if (level.levelChanged && activateTimer)
             {
                 HpRegenSpeed += 200;
                 hpRegen.Interval = HpRegenSpeed;
                 hpRegen.Enabled = true;
                 totalTimer.Interval = totalTimerSpeed;
                 totalTimer.Enabled = true;
-                ActivateTimer = false;
+                activateTimer = false;
             }
 
             if (BulletCount >= MaxBullet)

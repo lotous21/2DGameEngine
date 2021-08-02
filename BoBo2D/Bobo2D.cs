@@ -29,14 +29,14 @@ namespace BoBo2D
         GameObjects playerObject;
         GameObjects uiObject;
         GameObjects backgroundsObject;
-        GameObjects GameManagerObj;
+        GameObjects gameManagerObj;
         GameObjects upgradeUiObj;
         GameObjects spawnerObj;
         GameObjects weaponsObj;
 
         SplashScreen splashScreen;
         Button playButton;
-        Input GameControls;
+        Input gameControls;
 
         StaticBackground staticBackground1;
         StaticBackground staticBackground2;
@@ -126,17 +126,17 @@ namespace BoBo2D
             playButton = new Button(new Rectangle(0, 0, 380, 160), playLabel, Content.Load<Texture2D>("Button2"), Color.White);
             playButton.Invoke();
 
-            Projectile MissileBullet = new Projectile(new Vector2(-50, -50), Content.Load<Texture2D>("Missile"), new Vector2(500, 0), Color.White);
-            MissileBullet.Disable();
+            Projectile missileBullet = new Projectile(new Vector2(-50, -50), Content.Load<Texture2D>("Missile"), new Vector2(500, 0), Color.White);
+            missileBullet.Disable();
 
-            SoundEffect MissileShot = Content.Load<SoundEffect>("ShotSound");
+            SoundEffect missileShot = Content.Load<SoundEffect>("ShotSound");
 
             hitSound = Content.Load<SoundEffect>("hit");
             reloadSound = Content.Load<SoundEffect>("reload");
             backgroundMusic = Content.Load<Song>("Master");
 
-            missiles = new Weapon("Missiles", MissileBullet, Keys.D1, MissileShot, weapons);
-            bor = new Weapon("Bor", MissileBullet, Keys.D2, MissileShot, weapons);
+            missiles = new Weapon("Missiles", missileBullet, Keys.D1, missileShot, weapons);
+            bor = new Weapon("Bor", missileBullet, Keys.D2, missileShot, weapons);
 
             missiles.Disable();
             bor.Disable();
@@ -147,9 +147,9 @@ namespace BoBo2D
             weapons.Add(missiles);
             weapons.Add(bor);
 
-            bullets.Add(MissileBullet);
+            bullets.Add(missileBullet);
 
-            selectedWeaponText = new Text(basicFont, "Selected Weapon: " + GetWeaponSelected().WeaponName, new Vector2(10, 10), Color.Green);
+            selectedWeaponText = new Text(basicFont, "Selected Weapon: " + getWeaponSelected().WeaponName, new Vector2(10, 10), Color.Green);
 
             staticBackground1 = new StaticBackground(new Vector2(0, 0), new Vector2(-50, 0), Content.Load<Texture2D>("City2d"), Color.White);
             staticBackground2 = new StaticBackground(new Vector2(1281, 0), new Vector2(-50, 0), Content.Load<Texture2D>("City2dRef"), Color.White);
@@ -176,11 +176,11 @@ namespace BoBo2D
             playerScoreText = new Text(basicFont, "Score: " + score, new Vector2(10, 640), Color.White);
             levelText = new Text(basicFont, "Level: " + levels.Level.ToString(), new Vector2(600, 10), Color.Red);
 
-            Text ConfirmText = new Text(basicFont, "Press 'Enter' to Continue", new Vector2(300, 360), Color.White);
+            Text confirmText = new Text(basicFont, "Press 'Enter' to Continue", new Vector2(300, 360), Color.White);
             logUpgradeText = new Text(basicFont, "Log: " + upgradeLog, new Vector2(300, 420), Color.Orange);
 
-            GameControls = new Input(Keys.Space, player, weapons, bullets);
-            GameControls.Arrows();
+            gameControls = new Input(Keys.Space, player, weapons, bullets);
+            gameControls.Arrows();
 
             playBackground = true;
 
@@ -198,7 +198,7 @@ namespace BoBo2D
             playerObject = new GameObjects();
             playerObject.AddComponenet(player);
             playerObject.AddComponenet(missiles);
-            playerObject.AddComponenet(MissileBullet);
+            playerObject.AddComponenet(missileBullet);
 
             uiObject = new GameObjects();
             uiObject.AddComponenet(selectedWeaponText);
@@ -212,8 +212,8 @@ namespace BoBo2D
             backgroundsObject.AddComponenet(staticBackground1);
             backgroundsObject.AddComponenet(staticBackground2);
 
-            GameManagerObj = new GameObjects();
-            GameManagerObj.AddComponenet(GameControls);
+            gameManagerObj = new GameObjects();
+            gameManagerObj.AddComponenet(gameControls);
 
             weaponsObj = new GameObjects();
             weaponsObj.AddComponenet(missiles);
@@ -221,7 +221,7 @@ namespace BoBo2D
 
             upgradeUiObj = new GameObjects();
             upgradeUiObj.AddComponenet(logUpgradeText);
-            upgradeUiObj.AddComponenet(ConfirmText);
+            upgradeUiObj.AddComponenet(confirmText);
 
             speedUpgrade = new Upgrade("Moving Speed", 100, true, Keys.Z, 100, upgradeUiObj, logUpgradeText, basicFont, levels, new Vector2 (300,300), 1000, spawners);
             hpRegenUpgrade = new Upgrade("HP Regeneration", 200, false, Keys.X, 150, upgradeUiObj, logUpgradeText, basicFont, levels, new Vector2(300, 320), 100, spawners);
@@ -239,7 +239,7 @@ namespace BoBo2D
             openingScene.AddGameObject(mainMenuObject);
             openingScene.AddGameObject(splashScreenObject);
 
-            gameScene.AddGameObject(GameManagerObj);
+            gameScene.AddGameObject(gameManagerObj);
             gameScene.AddGameObject(backgroundsObject);
             gameScene.AddGameObject(playerObject);
             gameScene.AddGameObject(uiObject);
@@ -286,7 +286,7 @@ namespace BoBo2D
                 if (s.IsFire)
                 {
                     s.BulletImage = Content.Load<Texture2D>("Missile");
-                    s.projectiles = enemyBullet;
+                    s.ProjectilesList = enemyBullet;
                 }
             }
             foreach (Projectile p in bullets.ToArray())
@@ -320,15 +320,15 @@ namespace BoBo2D
                 if (s.IsFire)
                 {
                     s.BulletImage = Content.Load<Texture2D>("Missile");
-                    s.projectiles = enemyBullet;
+                    s.ProjectilesList = enemyBullet;
                 }
             }
 
-            CheckCollisions();
+            checkCollisions();
 
-            BlankGame();
+            blankGame();
 
-            selectedWeaponText.Label = "Selected Weapon: " + GetWeaponSelected().WeaponName;
+            selectedWeaponText.Label = "Selected Weapon: " + getWeaponSelected().WeaponName;
             levelText.Label = "Level: " + levels.Level;
             bulletCountText.Label = "Bullets: " + player.BulletCount;
             playerHealthText.Label = "HP: " + player.HP;
@@ -393,7 +393,7 @@ namespace BoBo2D
             base.Draw(gameTime);
         }
 
-        Weapon GetWeaponSelected()
+        Weapon getWeaponSelected()
         {
             foreach (Weapon w in weapons)
             {
@@ -405,7 +405,7 @@ namespace BoBo2D
 
             return null;
         }
-        void BlankGame()
+        void blankGame()
         {
             if (allScenes.Count == 0)
             {
@@ -418,7 +418,7 @@ namespace BoBo2D
                 g.AddComponenet(t);
             }
         }
-        void CheckCollisions()
+        void checkCollisions()
         {
             if (!spawners[0].ActivateSpawn)
             {

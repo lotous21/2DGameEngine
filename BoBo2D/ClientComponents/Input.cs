@@ -8,18 +8,18 @@ namespace BoBo2D
 {
     class Input: Componenet
     {
-        public Keys UpKey;
-        public Keys DownKey;
-        public Keys RighyKey;
-        public Keys LeftKey;
-        public Keys FireKey;
+        public Keys UpKey { get; set; }
+        public Keys DownKey { get; set; }
+        public Keys RighyKey { get; set; }
+        public Keys LeftKey { get; set; }
+        public Keys FireKey { get; set; }
 
         SpaceShip player;
 
         List<Weapon> weapons;
         List<Projectile> bullets;
 
-        KeyboardState PrevState;
+        KeyboardState prevState;
 
         public Input(Keys up, Keys down, Keys right, Keys left, Keys fire, SpaceShip _player, List<Weapon> _weapons, List<Projectile> _bullets)
         {
@@ -57,7 +57,7 @@ namespace BoBo2D
             {
                 player.Transform.Velocity.X = -player.MovingSpeed;
             }
-            if (Keyboard.GetState().IsKeyDown(FireKey) && PrevState.IsKeyUp(FireKey) && player.BulletCount > 0)
+            if (Keyboard.GetState().IsKeyDown(FireKey) && prevState.IsKeyUp(FireKey) && player.BulletCount > 0)
             {
                 Projectile p = new Projectile(GetWeaponSelected().Bullet.Transform.Position, GetWeaponSelected().Bullet.Image, GetWeaponSelected().Bullet.Transform.Velocity, Color.White);
                 bullets.Add(p);
@@ -67,7 +67,7 @@ namespace BoBo2D
                 player.BulletCount--;
             }
 
-            PrevState = Keyboard.GetState();
+            prevState = Keyboard.GetState();
         }
         public void WASD()
         {

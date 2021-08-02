@@ -12,13 +12,11 @@ namespace BoBo2D
         Video intro;
         VideoPlayer video = new VideoPlayer();
 
-        bool play;
         public bool ExitScene;
 
         public LogoIntro (Video introVid)
         {
             this.intro = introVid;
-            play = true;
             ExitScene = false;
             video.Play(intro);
         }

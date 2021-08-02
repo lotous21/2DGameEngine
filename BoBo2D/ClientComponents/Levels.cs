@@ -10,17 +10,15 @@ namespace BoBo2D
     class Levels: Componenet
     {
         Timer levelTimer;
-        public Scenes activeScene;
 
+        public Scenes ActiveScene;
         public int Level { get; set; }
         public int LevelTime { get; set; }
-        public int UpgradesToProceed;
-        public int DeceaseSpawnTime;
-        public int IncreaseLevelTime;
-        public int IncreaseUpgradeToProceed;
-
-        public bool IsLevelCompleted;
-
+        public int UpgradesToProceed { get; set; }
+        public int DeceaseSpawnTime { get; set; }
+        public int IncreaseLevelTime { get; set; }
+        public int IncreaseUpgradeToProceed { get; set; }
+        public bool IsLevelCompleted { get; set; }
         public bool levelChanged { get; set; }
 
         public List<Spawner> spawners;
@@ -34,7 +32,7 @@ namespace BoBo2D
             this.IncreaseUpgradeToProceed = _increaseUpgradeToProcceed;
             this.LevelTime = _levelTime;
             this.Level = 1;
-            this.activeScene = attachedScene;
+            this.ActiveScene = attachedScene;
             levelTimer = new Timer();
             levelChanged = true;
             this.Enable();
@@ -57,7 +55,7 @@ namespace BoBo2D
 
         public override void Update(float elapsed)
         {
-            if (levelChanged && activeScene.IsSceneActive())
+            if (levelChanged && ActiveScene.IsSceneActive())
             {
                 IsLevelCompleted = false;
                 levelTimer.Enabled = true;
