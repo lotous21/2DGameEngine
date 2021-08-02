@@ -111,6 +111,9 @@ namespace BoBo2D
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
+            //PAY ATTENTION
+            //All times are in milleseconds, 1 seonds = 1000 millesconds;
+
             basicFont = Content.Load<SpriteFont>("Font");
             intro = Content.Load<Video>("intro2");
 
@@ -157,6 +160,7 @@ namespace BoBo2D
             reloads = new Spawner(levels, spawnList, Content.Load<Texture2D>("Poweup"), 50, Color.White, 7100, true, false, false, true, false);
             shields = new Spawner(levels, spawnList, Content.Load<Texture2D>("Shield"), 50, Color.White, 11700, true, false, false, false, true);
             enemy = new Spawner(levels, spawnList, Content.Load<Texture2D>("Plane3"), 50, Color.White, 8200, false, true, true, false, false);
+
             spawners.Add(meteor);
             spawners.Add(reloads);
             spawners.Add(shields);
@@ -260,12 +264,9 @@ namespace BoBo2D
             if (playButton.IsClick())
             {
                 openingScene.DeactivateScene();
-            }
-
-            if (!openingScene.IsSceneActive() && !logoScene.IsSceneActive())
-            {
                 gameScene.ActivateScene();
             }
+
             if (gameScene.IsSceneActive() && playBackground)
             {
                 MediaPlayer.Play(backgroundMusic);
@@ -401,6 +402,7 @@ namespace BoBo2D
                     return w;
                 }
             }
+
             return null;
         }
         void BlankGame()

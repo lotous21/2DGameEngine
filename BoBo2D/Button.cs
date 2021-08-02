@@ -32,7 +32,6 @@ namespace BoBo2D
         }
         public void Invoke()
         {
-            mouseRec = new Rectangle(currentMouseState.X, currentMouseState.Y, 1, 1);
             clicked = false;
 
         }
@@ -46,7 +45,7 @@ namespace BoBo2D
         }
         public bool IsHover()
         {
-            if (clicked)
+            if (hoover)
             {
                 return true;
             }
@@ -56,8 +55,8 @@ namespace BoBo2D
         {
             prevMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
-            mouseRec = new Rectangle(0, 0, currentMouseState.X, currentMouseState.Y);
-            if (mouseRec.Intersects(this.Bounds))
+
+            if (currentMouseState.X < this.Transform.Position.X + this.Image.Width && currentMouseState.X > this.Transform.Position.X && currentMouseState.Y < this.Transform.Position.Y + this.Image.Height && currentMouseState.Y > this.Transform.Position.Y)
             {
                 hoover = true;
                 if (currentMouseState.LeftButton == ButtonState.Pressed && prevMouseState.LeftButton == ButtonState.Released)
@@ -66,8 +65,16 @@ namespace BoBo2D
                 }
                 else clicked = false;
             }
-            else hoover = false;
+            else
+            {
+                hoover = false;
+            }
 
+            if (hoover)
+            {
+                this.ImageColor = Color.Red;
+            }
+            else this.ImageColor = Color.White;
         }
     }
 }
