@@ -16,11 +16,11 @@ namespace BoBo2D
         bool clicked;
         bool hoover;
 
-        public Button(Rectangle bounds, Text text, Texture2D image, Color color)
+        public Button(Vector2 position, Rectangle bounds, Text text, Texture2D image, Vector2 textPos, Color color)
         {
-            this.Transform.Position = new Vector2(430, 250);
+            this.Transform.Position = position;
             this.Bounds = bounds;
-            text.Transform.Position = new Vector2(590, 320);
+            text.Transform.Position = textPos;
             this.Image = image;
             this.ImageColor = color;
             this.Enable();

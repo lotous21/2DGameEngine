@@ -128,7 +128,7 @@ namespace BoBo2D
             Text playLabel = new Text(basicFont, "Play!", new Vector2(0, 0), Color.White);
             Background mainMenu = new Background(new Vector2(0, 0), new Rectangle(1280, 720, 0, 0), Content.Load<Texture2D>("Sky"), Color.White);
 
-            playButton = new Button(new Rectangle(0, 0, 380, 160), playLabel, Content.Load<Texture2D>("Button2"), Color.White);
+            playButton = new Button(new Vector2(430, 250), new Rectangle(0, 0, 380, 160), playLabel, Content.Load<Texture2D>("Button2"), new Vector2(590, 320), Color.White);
             playButton.Invoke();
 
             Projectile missileBullet = new Projectile(new Vector2(-50, -50), Content.Load<Texture2D>("Missile"), new Vector2(500, 0), Color.White);
