@@ -3,10 +3,7 @@
 Built with C#, Microsoft XNA and Monogame
 
 Simple game engine behavior fimilliar with Unity game engine:
-GameObjects
-Components
-Scenes
-CallBacks
+GameObjects, Componentsm, Scenes and CallBacks
 
 
 Engine Features:
